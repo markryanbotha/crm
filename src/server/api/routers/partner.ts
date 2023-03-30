@@ -19,7 +19,7 @@ export const partnerRouter = createTRPCRouter({
 
   updatePartner: publicProcedure
     .input(partnerSchema)
-    .query(async ({ input }) => {
+    .mutation(async ({ input }) => {
       const partner = await prisma.partner.update({
         where: { id: input.id },
         data: input,

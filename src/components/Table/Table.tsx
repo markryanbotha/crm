@@ -50,7 +50,6 @@ export default function Table() {
           </table>
         ) : null}
       </div>
-      )
     </div>
   );
 }
