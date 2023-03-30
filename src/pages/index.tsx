@@ -15,8 +15,8 @@ const Home: NextPage = () => {
       <main className="flex min-h-screen flex-col items-center justify-start bg-gradient-to-b from-[#282c35] to-[#15162c]">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[4rem]">
-            Customer{" "}
-            <span className="text-[#31a5ce]">Relationships</span> App
+            Partner{" "}
+            <span className="text-[#31a5ce]">Relationship</span> Manager
           </h1>
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white"></p>

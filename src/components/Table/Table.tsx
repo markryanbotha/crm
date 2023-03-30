@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { api } from "~/utils/api";
+import { CreateOrEditModal } from "./CreateOrEditModal";
 import { TableRow } from "./TableRow";
 
 export const columns = [
@@ -11,6 +13,7 @@ export const columns = [
 export type Columns = (typeof columns)[number];
 
 export default function Table() {
+  const [isCreateModalOpen, setIsCreateModelOpen] = useState(false);
   const partners = api.partner.getAllPartners.useQuery();
   const partnerData = partners?.data && partners.data;
 
@@ -24,9 +27,16 @@ export default function Table() {
           </p>
         </div>
         <div className="mt-3 md:mt-0">
-          <a className="inline-block rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white duration-150 hover:bg-indigo-500 active:bg-indigo-700 md:text-sm">
+          <CreateOrEditModal
+            type="create"
+            isOpenState={[isCreateModalOpen, setIsCreateModelOpen]}
+          />
+          <button
+            onClick={() => setIsCreateModelOpen(true)}
+            className="inline-block rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white duration-150 hover:bg-indigo-500 active:bg-indigo-700 md:text-sm"
+          >
             Add member
-          </a>
+          </button>
         </div>
       </div>
       <div className="mt-12 overflow-x-auto rounded-lg border shadow-sm">
