@@ -51,13 +51,22 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "username" },
+        email: { label: "Email", type: "text", placeholder: "email" },
+        role: { label: "Role", type: "text", placeholder: "role" },
         password: { label: "Password", type: "password" },
       },
-      authorize(credentials, req) {
-        // TODO
-
-        return { id: "user", password: "password" };
+      async authorize(credentials, req) {
+        if (!credentials) {
+          throw new Error("Did not retrieve credentials");
+        }
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email },
+        });
+        if (!user) {
+          throw new Error("No user found");
+        }
+        // return { id: user.id, role: user.role };
+        return { id: user.id };
       },
     }),
     /**
