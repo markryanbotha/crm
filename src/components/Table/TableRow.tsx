@@ -26,7 +26,7 @@ export const TableRow: FC<TableRowProps> = ({ partner }) => {
         />
         <button
           onClick={() => setIsEditModalOpen(true)}
-          className="rounded-lg py-2 px-3 font-medium text-indigo-600 duration-150 hover:bg-gray-50 hover:text-indigo-500"
+          className="rounded-lg py-2 px-3 font-medium text-sky-600 duration-150 hover:bg-gray-50 hover:text-sky-500"
         >
           Edit
         </button>

@@ -33,7 +33,7 @@ const RowItem: FC<RowItemProps> = ({ columnName, formControls }) => {
       id={columnName}
       type="text"
       aria-invalid={errors[columnName] ? "true" : "false"}
-      className={`w-full rounded-lg border bg-transparent py-2 pl-2 pr-3 pb-2 text-gray-700 shadow-sm outline-none focus:border-indigo-600${
+      className={`w-full rounded-lg border bg-transparent py-2 pl-2 pr-3 pb-2 text-gray-700 shadow-sm outline-none focus:border-sky-600${
         errors[columnName] ? " border-red-500" : ""
       }`}
       {...register(columnName, { required: true })}
@@ -132,7 +132,7 @@ export const CreateOrEditModal: FC<ModalProps> = ({
                   />
                 </div>
               ))}
-              <button className="mt-3 block w-full rounded-lg bg-indigo-600 py-3 px-4 text-center text-sm font-medium text-white ring-indigo-600 ring-offset-2 hover:bg-indigo-500 focus:ring-2 active:bg-indigo-700">
+              <button className="mt-3 block w-full rounded-lg bg-sky-600 py-3 px-4 text-center text-sm font-medium text-white ring-sky-600 ring-offset-2 hover:bg-sky-500 focus:ring-2 active:bg-sky-700">
                 Submit
               </button>
             </form>

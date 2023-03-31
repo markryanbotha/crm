@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { api } from "~/utils/api";
 import { userDetails, type UserDetails } from "~/server/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/router";
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true); // The page is in a Sign in state if this is true, otherwise, it is in a Sign up state if it is false
@@ -15,7 +16,8 @@ const Login = () => {
   } = useForm<UserDetails>({
     resolver: zodResolver(userDetails.partial()),
   });
-  console.log(errors);
+
+  const router = useRouter();
 
   // TODO error handling and validation
   const onSubmit = async (
@@ -23,12 +25,11 @@ const Login = () => {
     event?: BaseSyntheticEvent
   ) => {
     event?.preventDefault();
-    console.log("I ran");
     if (!isSignIn) {
-      signUp.mutate({ email, role });
+      await signUp.mutateAsync({ email, role });
     }
     await signIn("credentials", {
-      callbackUrl: "/",
+      callbackUrl: (router.query?.callbackUrl as string) ?? "/",
       email,
       role,
     });
@@ -40,7 +41,7 @@ const Login = () => {
         <div className="text-center">
           <div className="mt-5 space-y-2">
             <h3 className="text-2xl font-bold text-gray-800 sm:text-3xl">
-              Log in to your account
+              {isSignIn ? "Log in to your account" : "Sign up"}
             </h3>
             <p className="">
               {isSignIn
@@ -48,7 +49,7 @@ const Login = () => {
                 : "Already have an account? "}
               <button
                 onClick={() => setIsSignIn(!isSignIn)}
-                className="font-medium text-indigo-600 hover:text-indigo-500"
+                className="font-medium text-sky-600 hover:text-sky-500"
               >
                 {isSignIn ? "Sign up" : "Sign in"}
               </button>
@@ -61,7 +62,7 @@ const Login = () => {
             <input
               type="email"
               required
-              className="mt-2 w-full rounded-lg border bg-transparent px-3 py-2 text-gray-500 shadow-sm outline-none focus:border-indigo-600"
+              className="mt-2 w-full rounded-lg border bg-transparent px-3 py-2 text-gray-500 shadow-sm outline-none focus:border-sky-600"
               {...register("email", { required: true })}
             />
           </div>
@@ -82,7 +83,7 @@ const Login = () => {
                   />
                 </svg>
                 <select
-                  className="w-full appearance-none rounded-md border bg-white p-2.5 text-gray-500 shadow-sm outline-none focus:border-indigo-600"
+                  className="w-full appearance-none rounded-md border bg-white p-2.5 text-gray-500 shadow-sm outline-none focus:border-sky-600"
                   {...register("role", {
                     required: true,
                   })}
@@ -93,7 +94,7 @@ const Login = () => {
               </div>
             </div>
           ) : null}
-          <button className="w-full rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white duration-150 hover:bg-indigo-500 active:bg-indigo-600">
+          <button className="w-full rounded-lg bg-sky-600 px-4 py-2 font-medium text-white duration-150 hover:bg-sky-500 active:bg-sky-600">
             {isSignIn ? "Sign in" : "Sign up"}
           </button>
         </form>

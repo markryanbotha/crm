@@ -33,7 +33,7 @@ export default function Table() {
           />
           <button
             onClick={() => setIsCreateModelOpen(true)}
-            className="inline-block rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white duration-150 hover:bg-indigo-500 active:bg-indigo-700 md:text-sm"
+            className="inline-block rounded-lg bg-sky-600 px-4 py-2 font-medium text-white duration-150 hover:bg-sky-500 active:bg-sky-700 md:text-sm"
           >
             Add partner 
           </button>

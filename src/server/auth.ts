@@ -55,7 +55,6 @@ export const authOptions: NextAuthOptions = {
         role: { label: "Role", type: "text", placeholder: "role" },
       },
       async authorize(credentials) {
-        console.log("I ran");
         if (!credentials) {
           throw new Error("Did not retrieve credentials");
         }

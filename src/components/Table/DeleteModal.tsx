@@ -64,13 +64,13 @@ export const DeleteModal: FC<DeleteModalProps> = ({ partner, isOpenState }) => {
           </div>
           <div className="mt-5 flex items-center gap-3 border-t p-4">
             <button
-              className="rounded-md bg-indigo-600 px-6 py-2 text-white outline-none ring-indigo-600 ring-offset-2 focus:ring-2"
+              className="rounded-md bg-sky-600 px-6 py-2 text-white outline-none ring-sky-600 ring-offset-2 focus:ring-2"
               onClick={() => handleDelete()}
             >
               Accept
             </button>
             <button
-              className="rounded-md border px-6 py-2 text-gray-800 outline-none ring-indigo-600 ring-offset-2 focus:ring-2"
+              className="rounded-md border px-6 py-2 text-gray-800 outline-none ring-sky-600 ring-offset-2 focus:ring-2"
               onClick={() => setIsOpen(false)}
             >
               Cancel
