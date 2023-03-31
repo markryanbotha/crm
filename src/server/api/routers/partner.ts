@@ -1,15 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { prisma } from "~/server/db";
-
-const partnerSchema = z.object({
-  id: z.string().optional(),
-  name: z.string(),
-  email: z.string().nullable().optional(),
-  phone: z.string().nullable().optional(),
-  territory: z.string(),
-  summary: z.string(),
-});
+import { partnerSchema } from "~/server/types";
 
 export const partnerRouter = createTRPCRouter({
   getAllPartners: publicProcedure.query(async () => {

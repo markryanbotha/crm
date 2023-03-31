@@ -35,7 +35,7 @@ export default function Table() {
             onClick={() => setIsCreateModelOpen(true)}
             className="inline-block rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white duration-150 hover:bg-indigo-500 active:bg-indigo-700 md:text-sm"
           >
-            Add member
+            Add partner 
           </button>
         </div>
       </div>

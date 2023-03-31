@@ -1,3 +1,4 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import type { Partner } from "@prisma/client";
 import {
   type Dispatch,
@@ -6,6 +7,7 @@ import {
   type BaseSyntheticEvent,
 } from "react";
 import { type UseFormReturn, useForm } from "react-hook-form";
+import { partnerSchema } from "~/server/types";
 import { api } from "~/utils/api";
 import { columns, type Columns } from "./Table";
 
@@ -22,18 +24,9 @@ type RowItemProps = {
 
 const RowItem: FC<RowItemProps> = ({ columnName, formControls }) => {
   const {
-    setValue,
     register,
     formState: { errors },
   } = formControls;
-
-  const handleTyping = (event: React.FormEvent<HTMLInputElement>) => {
-    setValue(columnName, event.currentTarget.value);
-  };
-
-  if (errors[columnName]) {
-    console.log(errors[columnName]);
-  }
 
   return (
     <input
@@ -43,7 +36,7 @@ const RowItem: FC<RowItemProps> = ({ columnName, formControls }) => {
       className={`w-full rounded-lg border bg-transparent py-2 pl-2 pr-3 pb-2 text-gray-700 shadow-sm outline-none focus:border-indigo-600${
         errors[columnName] ? " border-red-500" : ""
       }`}
-      {...register(columnName, { onChange: handleTyping, required: true })}
+      {...register(columnName, { required: true })}
     />
   );
 };
@@ -63,6 +56,7 @@ export const CreateOrEditModal: FC<ModalProps> = ({
     );
   const formControls = useForm<Partner>({
     defaultValues,
+    resolver: zodResolver(partnerSchema),
   });
   const { handleSubmit } = formControls;
   const createOrEditPartner =

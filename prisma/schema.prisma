@@ -12,31 +12,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Necessary for Next auth
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
 model User {
   id            String    @id @default(cuid())
-  email         String?   @unique
+  email         String   @unique
   name          String?
-  role          String
-  emailVerified DateTime?
-  sessions      Session[]
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
+  role          String 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Partner {
