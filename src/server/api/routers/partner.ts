@@ -1,19 +1,18 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { prisma } from "~/server/db";
 import { partnerSchema } from "~/server/types";
 
 export const partnerRouter = createTRPCRouter({
-  getAllPartners: publicProcedure.query(async () => {
-    const partners = await prisma.partner.findMany();
-    return partners;
+  getAllPartners: protectedProcedure.query(async () => {
+    return await prisma.partner.findMany();
   }),
-  createPartner: publicProcedure
+  createPartner: protectedProcedure
     .input(partnerSchema)
     .mutation(async ({ input }) => {
       return await prisma.partner.create({ data: input });
     }),
-  updatePartner: publicProcedure
+  updatePartner: protectedProcedure
     .input(partnerSchema)
     .mutation(async ({ input }) => {
       return await prisma.partner.update({
@@ -21,7 +20,7 @@ export const partnerRouter = createTRPCRouter({
         data: input,
       });
     }),
-  deletePartner: publicProcedure
+  deletePartner: protectedProcedure
     .input(z.string())
     .mutation(async ({ input }) => {
       return await prisma.partner.delete({ where: { id: input } });

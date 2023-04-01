@@ -117,5 +117,5 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  *
  * @see https://trpc.io/docs/procedures
  */
-// TODO use this
+
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
