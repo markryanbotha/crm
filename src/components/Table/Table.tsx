@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api } from "~/utils/api";
+import { Loading } from "../common";
 import { CreateOrEditModal } from "./CreateOrEditModal";
 import { TableRow } from "./TableRow";
 
@@ -18,8 +19,8 @@ export default function Table() {
   const partnerData = partners?.data && partners.data;
 
   return (
-    <div className="mx-auto max-w-screen-xl px-4 md:px-8">
-      <div className="items-start justify-between md:flex">
+    <div className="mx-auto w-full max-w-screen-xl px-4 md:px-8">
+      <div className="justify-between md:flex">
         <div className="max-w-lg">
           <h3 className="text-xl font-bold text-white sm:text-2xl">Partners</h3>
           <p className="mt-2 text-white">
@@ -35,12 +36,12 @@ export default function Table() {
             onClick={() => setIsCreateModelOpen(true)}
             className="inline-block rounded-lg bg-sky-600 px-4 py-2 font-medium text-white duration-150 hover:bg-sky-500 active:bg-sky-700 md:text-sm"
           >
-            Add partner 
+            Add partner
           </button>
         </div>
       </div>
-      <div className="mt-12 overflow-x-auto rounded-lg border shadow-sm">
-        {partnerData ? (
+      {partnerData ? (
+        <div className="mt-12 overflow-x-auto rounded-lg border shadow-sm">
           <table className="w-full table-auto text-left text-sm">
             <thead className="border-b bg-gray-50 font-medium text-gray-600">
               <tr>
@@ -58,8 +59,12 @@ export default function Table() {
               ))}
             </tbody>
           </table>
-        ) : null}
-      </div>
+        </div>
+      ) : (
+        <div className="flex w-full items-center justify-center py-20">
+          <Loading />
+        </div>
+      )}
     </div>
   );
 }

@@ -1,9 +1,12 @@
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 const Navbar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const { data: sessionData } = useSession();
+  const router = useRouter();
 
   const navigation = [
     { title: "Partners", path: "/dashboard/partners" },
@@ -75,10 +78,12 @@ const Navbar = () => {
         </div>
         <div className="hidden justify-self-end md:flex">
           <button
-            onClick={() => void signOut()}
+            onClick={() =>
+              sessionData?.user ? void signOut() : void router.push("/login")
+            }
             className="rounded-lg bg-transparent py-2 px-4 text-white shadow hover:bg-sky-500"
           >
-            Log out
+            {sessionData?.user ? "Log out" : "Log in"}
           </button>
         </div>
       </div>

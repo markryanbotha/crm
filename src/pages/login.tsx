@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
 
 const Login = () => {
-  const [isSignIn, setIsSignIn] = useState(true); // The page is in a Sign in state if this is true, otherwise, it is in a Sign up state if it is false
+  const [isSignIn, setIsSignIn] = useState(false); // The page is in a Sign in state if this is true, otherwise, it is in a Sign up state if it is false
   const signUp = api.user.signUp.useMutation();
   const {
     register,
