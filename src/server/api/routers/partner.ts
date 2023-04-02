@@ -1,28 +1,35 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { prisma } from "~/server/db";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 import { partnerSchema } from "~/server/types";
 
 export const partnerRouter = createTRPCRouter({
-  getAllPartners: protectedProcedure.query(async () => {
-    return await prisma.partner.findMany();
+  getAllPartnerNames: publicProcedure.query(async ({ ctx }) => {
+    const partners = await ctx.prisma.partner.findMany();
+    return partners.map((partner) => partner.name);
+  }),
+  getAllPartners: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.partner.findMany();
   }),
   createPartner: protectedProcedure
     .input(partnerSchema)
-    .mutation(async ({ input }) => {
-      return await prisma.partner.create({ data: input });
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.partner.create({ data: input });
     }),
   updatePartner: protectedProcedure
     .input(partnerSchema)
-    .mutation(async ({ input }) => {
-      return await prisma.partner.update({
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.partner.update({
         where: { id: input.id },
         data: input,
       });
     }),
   deletePartner: protectedProcedure
     .input(z.string())
-    .mutation(async ({ input }) => {
-      return await prisma.partner.delete({ where: { id: input } });
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.partner.delete({ where: { id: input } });
     }),
 });

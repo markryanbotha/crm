@@ -1,19 +1,53 @@
 import { signIn } from "next-auth/react";
-import { type BaseSyntheticEvent, useState } from "react";
-import { useForm } from "react-hook-form";
+import { type FC, type BaseSyntheticEvent, useState } from "react";
+import { useForm, type UseFormRegister } from "react-hook-form";
 import { api } from "~/utils/api";
-import { userDetails, type UserDetails } from "~/server/types";
+import { type UserDetails, userDetails } from "~/server/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
+import { Loading } from "~/components/common";
+
+const SelectPartner: FC<{ register: UseFormRegister<UserDetails> }> = ({
+  register,
+}) => {
+  const { data: partnerData } = api.partner.getAllPartnerNames.useQuery();
+
+  if (!partnerData) return <Loading />;
+
+  return (
+    <div>
+      <label className="font-medium">Company</label>
+      <div className="relative">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="absolute top-0 bottom-0 right-2.5 my-auto h-6 w-6 text-gray-400"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fillRule="evenodd"
+            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+            clipRule="evenodd"
+          />
+        </svg>
+        <select
+          className="w-full appearance-none rounded-md border bg-white p-2.5 text-gray-500 shadow-sm outline-none focus:border-indigo-600"
+          {...register("partner")}
+        >
+          {partnerData.map((name, index) => (
+            <option key={index}>{name}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
+};
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(false); // The page is in a Sign in state if this is true, otherwise, it is in a Sign up state if it is false
+  const [role, setRole] = useState("Admin");
   const signUp = api.user.signUp.useMutation();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<UserDetails>({
+  const { register, handleSubmit } = useForm<UserDetails>({
     resolver: zodResolver(userDetails.partial()),
   });
 
@@ -21,12 +55,12 @@ const Login = () => {
 
   // TODO error handling and validation
   const onSubmit = async (
-    { email, role }: UserDetails,
+    { email, role, partner }: UserDetails,
     event?: BaseSyntheticEvent
   ) => {
     event?.preventDefault();
     if (!isSignIn) {
-      await signUp.mutateAsync({ email, role });
+      await signUp.mutateAsync({ email, role, partner });
     }
     await signIn("credentials", {
       callbackUrl: (router.query?.callbackUrl as string) ?? "/",
@@ -87,6 +121,7 @@ const Login = () => {
                   {...register("role", {
                     required: true,
                   })}
+                  onChange={(e) => void setRole(e.currentTarget.value)}
                 >
                   <option>Admin</option>
                   <option>User</option>
@@ -94,6 +129,7 @@ const Login = () => {
               </div>
             </div>
           ) : null}
+          {role === "User" ? <SelectPartner register={register} /> : null}
           <button className="w-full rounded-lg bg-sky-600 px-4 py-2 font-medium text-white duration-150 hover:bg-sky-500 active:bg-sky-600">
             {isSignIn ? "Sign in" : "Sign up"}
           </button>

@@ -13,48 +13,53 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String   @unique
-  name          String?
-  role          String 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                     String           @id @default(cuid())
+  email                  String           @unique
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
+  name                   String?
+  role                   String
+  projects               PartnerProject[]
+  communicationsSent     Communication[]  @relation("sender")
+  communicationsReceived Communication[]  @relation("recipient")
+  partner                Partner?         @relation(fields: [partnerId], references: [id])
+  partnerId              String?
 }
 
 model Partner {
-  id        String           @id @default(cuid())
-  name      String
-  email     String?          @unique
-  phone     String?
-  projects  PartnerProject[]
-  territory String
-  summary   String
+  id               String           @id @default(cuid())
+  name             String           @unique
+  email            String?          @unique
+  phone            String?
+  projects         PartnerProject[]
+  territory        String?
+  summary          String?
+  primaryContact   String?
+  technicalContact String?
+  legalContact     String?
+  employees        User[]
 }
 
 model PartnerProject {
   id             String          @id @default(cuid())
   deviceType     String
-  jiraProject   String[]
-  partner        Partner         @relation(fields: [partnerId], references: [id])
-  partnerId      String
-  tpm            TPM             @relation(fields: [tpmId], references: [id])
+  jiraProject    String[]
+  partner        Partner?        @relation(fields: [partnerId], references: [id])
+  partnerId      String?
+  tpm            User            @relation(fields: [tpmId], references: [id])
   tpmId          String
-  communications Communitation[]
+  communications Communication[]
 }
 
-model TPM {
-  id       String           @id @default(cuid())
-  name     String
-  email    String?          @unique
-  phone    String?
-  projects PartnerProject[]
-}
-
-model Communitation {
+model Communication {
   id               String          @id @default(cuid())
   type             String
   header           String?
   content          String?
   PartnerProject   PartnerProject? @relation(fields: [partnerProjectId], references: [id])
   partnerProjectId String?
+  sender           User            @relation("sender", fields: [senderId], references: [id])
+  senderId         String
+  recipient        User            @relation("recipient", fields: [recipientId], references: [id])
+  recipientId      String
 }
