@@ -129,7 +129,9 @@ const Login = () => {
               </div>
             </div>
           ) : null}
-          {role === "User" ? <SelectPartner register={register} /> : null}
+          {role === "User" && !isSignIn ? (
+            <SelectPartner register={register} />
+          ) : null}
           <button className="w-full rounded-lg bg-sky-600 px-4 py-2 font-medium text-white duration-150 hover:bg-sky-500 active:bg-sky-600">
             {isSignIn ? "Sign in" : "Sign up"}
           </button>
