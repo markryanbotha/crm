@@ -119,3 +119,29 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  */
 
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+
+const enforceUserIsAdmin = t.middleware(({ ctx, next }) => {
+  if (!ctx.session || !ctx.session.user) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "This action requires the user to be signed in",
+    });
+  }
+  if (ctx.session.user.role !== "Admin") {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "This action requires Admin access",
+    });
+  }
+  return next({
+    ctx: {
+      // infers the `session` as non-nullable
+      session: {
+        ...ctx.session,
+        user: { ...ctx.session.user, role: "Admin" as const },
+      },
+    },
+  });
+});
+
+export const adminProcedure = t.procedure.use(enforceUserIsAdmin);

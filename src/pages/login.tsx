@@ -47,6 +47,7 @@ const Login = () => {
   const [isSignIn, setIsSignIn] = useState(false); // The page is in a Sign in state if this is true, otherwise, it is in a Sign up state if it is false
   const [role, setRole] = useState("Admin");
   const signUp = api.user.signUp.useMutation();
+  const assignPartner = api.partner.addUserToPartner.useMutation();
   const { register, handleSubmit } = useForm<UserDetails>({
     resolver: zodResolver(userDetails.partial()),
   });
@@ -60,7 +61,13 @@ const Login = () => {
   ) => {
     event?.preventDefault();
     if (!isSignIn) {
-      await signUp.mutateAsync({ email, role, partner });
+      const newUser = await signUp.mutateAsync({ email, role, partner });
+
+      if (!newUser || !partner) {
+        throw new Error("User could not sign up");
+      }
+
+      assignPartner.mutate({ partnerName: partner, userId: newUser.id });
     }
     await signIn("credentials", {
       callbackUrl: (router.query?.callbackUrl as string) ?? "/",

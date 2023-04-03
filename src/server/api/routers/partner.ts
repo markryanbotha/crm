@@ -1,5 +1,6 @@
 import { z } from "zod";
 import {
+  adminProcedure,
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
@@ -14,7 +15,7 @@ export const partnerRouter = createTRPCRouter({
   getAllPartners: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.partner.findMany();
   }),
-  createPartner: protectedProcedure
+  createPartner: adminProcedure
     .input(partnerSchema)
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.partner.create({ data: input });
@@ -27,9 +28,17 @@ export const partnerRouter = createTRPCRouter({
         data: input,
       });
     }),
-  deletePartner: protectedProcedure
+  deletePartner: adminProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.partner.delete({ where: { id: input } });
+    }),
+  addUserToPartner: publicProcedure
+    .input(z.object({ partnerName: z.string(), userId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.partner.update({
+        where: { name: input.partnerName },
+        data: { employees: { connect: { id: input.userId } } },
+      });
     }),
 });
