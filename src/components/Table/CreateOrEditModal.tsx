@@ -1,84 +1,38 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import type { Partner } from "@prisma/client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   type Dispatch,
   type SetStateAction,
-  type FC,
   type BaseSyntheticEvent,
 } from "react";
-import { type UseFormReturn, useForm } from "react-hook-form";
-import { partnerSchema } from "~/server/types";
-import { api } from "~/utils/api";
-import { columns, type Columns } from "./Table";
+import { type UseFormReturn, type FieldValues } from "react-hook-form";
+import type { ColumnDefinitionType, TableItem } from "./Table";
 
-type ModalProps = {
+export type BaseModalProps<T extends TableItem> = {
   type: "create" | "edit";
   isOpenState: [boolean, Dispatch<SetStateAction<boolean>>];
-  partner?: Partner;
+  columns: Array<ColumnDefinitionType<T, keyof T>>;
+  data?: T;
+  header: string;
 };
 
-type RowItemProps = {
-  columnName: Columns;
-  formControls: UseFormReturn<Partner>;
-};
+interface ModalProps<T extends TableItem> extends BaseModalProps<T> {
+  onSubmit: (data: T, event?: BaseSyntheticEvent) => Promise<void>;
+  formControls: UseFormReturn<T>;
+}
 
-const RowItem: FC<RowItemProps> = ({ columnName, formControls }) => {
+export const CreateOrEditModal = <T extends TableItem & FieldValues>({
+  header,
+  isOpenState,
+  onSubmit,
+  columns,
+  formControls,
+}: ModalProps<T>) => {
+  const [isOpen, setIsOpen] = isOpenState;
   const {
+    handleSubmit,
     register,
     formState: { errors },
   } = formControls;
-
-  return (
-    <input
-      id={columnName}
-      type="text"
-      aria-invalid={errors[columnName] ? "true" : "false"}
-      className={`w-full rounded-lg border bg-transparent py-2 pl-2 pr-3 pb-2 text-gray-700 shadow-sm outline-none focus:border-sky-600${
-        errors[columnName] ? " border-red-500" : ""
-      }`}
-      {...register(columnName, { required: true })}
-    />
-  );
-};
-
-export const CreateOrEditModal: FC<ModalProps> = ({
-  type,
-  isOpenState,
-  partner,
-}) => {
-  const [isOpen, setIsOpen] = isOpenState;
-  const utils = api.useContext();
-  const defaultValues =
-    partner ??
-    columns.reduce(
-      (currentObject, key) => ({ ...currentObject, [key]: "" }),
-      {}
-    );
-  const formControls = useForm<Partner>({
-    defaultValues,
-    resolver: zodResolver(partnerSchema),
-  });
-  const { handleSubmit } = formControls;
-  const createOrEditPartner =
-    type === "edit" ? api.partner.updatePartner : api.partner.createPartner;
-  // TODO error handling and validation
-  const upsertPartner = createOrEditPartner.useMutation({
-    async onMutate(partner) {
-      await utils.partner.getAllPartners.cancel();
-      return partner;
-    },
-    async onSettled() {
-      await utils.partner.getAllPartners.invalidate();
-      formControls.reset();
-    },
-  });
-
-  const onSubmit = async (partner: Partner, event?: BaseSyntheticEvent) => {
-    event?.preventDefault();
-    upsertPartner.mutate(partner);
-    await utils.invalidate();
-    setIsOpen(false);
-  };
 
   return isOpen ? (
     <div className="fixed inset-0 z-10 overflow-y-auto">
@@ -108,11 +62,7 @@ export const CreateOrEditModal: FC<ModalProps> = ({
             </button>
           </div>
           <div className="mx-auto max-w-sm space-y-3 py-3 text-center">
-            <h4 className="text-lg font-medium text-gray-800">
-              {type === "edit"
-                ? `Edit ${partner?.name ?? ""} Details`
-                : "Create New Partner"}
-            </h4>
+            <h4 className="text-lg font-medium text-gray-800">{header}</h4>
             <p className="text-[15px] text-gray-600">
               Enter Partner Details below
             </p>
@@ -123,12 +73,15 @@ export const CreateOrEditModal: FC<ModalProps> = ({
                   className="relative flex flex-col items-start justify-start gap-1"
                 >
                   <label className="text-start text-gray-800">
-                    {value.charAt(0).toUpperCase() + value.slice(1)}
+                    {value.header}
                   </label>
-                  <RowItem
-                    key={index}
-                    columnName={value}
-                    formControls={formControls}
+                  <input
+                    type="text"
+                    aria-invalid={errors[value.key] ? "true" : "false"}
+                    className={`w-full rounded-lg border bg-transparent py-2 pl-2 pr-3 pb-2 text-gray-700 shadow-sm outline-none focus:border-sky-600${
+                      errors[value.key] ? " border-red-500" : ""
+                    }`}
+                    {...register(value.key as any, { required: true })}
                   />
                 </div>
               ))}

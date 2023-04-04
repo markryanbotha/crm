@@ -1,45 +1,29 @@
-import type { Partner } from "@prisma/client";
-import { type FC, useState } from "react";
-import { CreateOrEditModal } from "./CreateOrEditModal";
-import { DeleteModal } from "./DeleteModal";
-import { columns } from "./Table";
+import { type ReactElement, cloneElement } from "react";
+import type { ColumnDefinitionType, TableItem } from "./Table";
 
-type TableRowProps = { partner: Partner };
+type TableRowProps<T extends TableItem, K extends keyof T> = {
+  data: T;
+  columns: Array<ColumnDefinitionType<T, K>>;
+  editModalButton: ReactElement<{ data: T }>;
+  deleteModalButton: ReactElement<{ id: string }>;
+};
 
-export const TableRow: FC<TableRowProps> = ({ partner }) => {
-  const [isEditModelOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModelOpen, setIsDeleteModelOpen] = useState(false);
-
+export const TableRow = <T extends TableItem, K extends keyof T>({
+  data,
+  columns,
+  editModalButton,
+  deleteModalButton,
+}: TableRowProps<T, K>) => {
   return (
-    <tr key={partner.id}>
-      {columns.map((value, index) => (
+    <tr>
+      {columns.map((column, index) => (
         <td key={index} className="whitespace-nowrap px-6 py-4">
-          {partner[value]}
+          {data[column.key] as string}
         </td>
       ))}
       <td className="whitespace-nowrap px-6 text-right">
-        <CreateOrEditModal
-          type="edit"
-          key={`${partner.id}_modal_${Math.random()}`}
-          partner={partner}
-          isOpenState={[isEditModelOpen, setIsEditModalOpen]}
-        />
-        <button
-          onClick={() => setIsEditModalOpen(true)}
-          className="rounded-lg py-2 px-3 font-medium text-sky-600 duration-150 hover:bg-gray-50 hover:text-sky-500"
-        >
-          Edit
-        </button>
-        <DeleteModal
-          partner={partner}
-          isOpenState={[isDeleteModelOpen, setIsDeleteModelOpen]}
-        />
-        <button
-          onClick={() => setIsDeleteModelOpen(true)}
-          className="rounded-lg py-2 px-3 font-medium leading-none text-red-600 duration-150 hover:bg-gray-50 hover:text-red-500"
-        >
-          Delete
-        </button>
+        {cloneElement(editModalButton, { data })}
+        {cloneElement(deleteModalButton, { id: data.id })}
       </td>
     </tr>
   );
