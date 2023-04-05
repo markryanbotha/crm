@@ -30,3 +30,14 @@ export const partnerProjectSchema = z.object({
   partnerId: z.string(),
   tpmId: z.string(),
 });
+
+export const communicationSchema = z.object({
+  id: z.string().optional(),
+  type: z.string(),
+  header: z.string().min(1).max(50).nullable(),
+  content: z.string().min(1).max(1000).nullable(),
+  date: z.date(),
+  partnerProjectId: z.string().nullable(),
+  senderId: z.string(),
+  recipientId: z.string(),
+});
