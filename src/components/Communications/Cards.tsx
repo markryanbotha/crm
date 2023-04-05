@@ -1,22 +1,20 @@
-import { type Communication } from "@prisma/client";
 import { formatRelative } from "date-fns";
 import Link from "next/link";
 import { api } from "~/utils/api";
 import { Loading } from "../common";
 import MessageNavigation from "./MessageNavigation";
-import { get } from "lodash";
+import { type CommunicationWithAggregations } from "~/server/types";
 
 type CardsProps = {
-  data: Communication[];
+  data: CommunicationWithAggregations[];
 };
 
 const Cards = ({ data }: CardsProps) => {
   return (
-    <section className="mx-auto mt-12 max-w-screen-lg px-4 md:px-8">
+    <section className="mx-auto mt-12  px-4 md:px-8">
       <ul className="mt-12 space-y-6">
         {data.map((message, idx) => (
           <li key={idx} className="rounded-md bg-white p-5 shadow-sm">
-            {/* <a href={communication.href}> */}
             <div>
               <div className="justify-between sm:flex">
                 <div className="flex-1">
@@ -43,20 +41,27 @@ const Cards = ({ data }: CardsProps) => {
                   </span>
                   <span className="flex items-center text-gray-500">
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-gray-400"
-                      fill="none"
+                      className="h-5 w-5 mr-2"
                       viewBox="0 0 24 24"
-                      stroke="currentColor"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+                        d="M15.7498 6C15.7498 8.07107 14.0709 9.75 11.9998 9.75C9.92877 9.75 8.24984 8.07107 8.24984 6C8.24984 3.92893 9.92877 2.25 11.9998 2.25C14.0709 2.25 15.7498 3.92893 15.7498 6Z"
+                        stroke="#6B7280"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M4.50098 20.1182C4.57128 16.0369 7.90171 12.75 11.9998 12.75C16.0981 12.75 19.4286 16.0371 19.4987 20.1185C17.2159 21.166 14.6762 21.75 12.0002 21.75C9.32384 21.75 6.78394 21.1659 4.50098 20.1182Z"
+                        stroke="#6B7280"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
                       />
                     </svg>
-                    {get(message, "recipient.email")}
+                    {message.sender.email}
                   </span>
                 </div>
               </div>
@@ -64,7 +69,7 @@ const Cards = ({ data }: CardsProps) => {
                 <span className="flex items-center text-gray-500">
                   Project:{" "}
                   <Link href="/dashboard/projects" className="text-gray-800">
-                    {get(message, "PartnerProject.jiraProject")}
+                    {message.partnerProject.jiraProject}
                   </Link>
                 </span>
                 <span className="flex items-center text-gray-500">
@@ -72,7 +77,6 @@ const Cards = ({ data }: CardsProps) => {
                 </span>
               </div>
             </div>
-            {/* </a> */}
           </li>
         ))}
       </ul>

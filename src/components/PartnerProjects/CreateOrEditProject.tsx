@@ -41,7 +41,6 @@ export const ProjectCreateOrEditModal = ({
 
   const onSubmit = async (data: PartnerProject, event?: BaseSyntheticEvent) => {
     event?.preventDefault();
-    console.log(data);
     upsertProject.mutate(data);
     await utils.invalidate();
     setIsOpen(false);

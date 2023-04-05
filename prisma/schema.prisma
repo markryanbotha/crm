@@ -57,7 +57,7 @@ model Communication {
   header           String?
   content          String?
   date             DateTime
-  PartnerProject   PartnerProject? @relation(fields: [partnerProjectId], references: [id])
+  partnerProject   PartnerProject? @relation(fields: [partnerProjectId], references: [id])
   partnerProjectId String?
   sender           User            @relation("sender", fields: [senderId], references: [id])
   senderId         String

@@ -31,13 +31,20 @@ export const partnerProjectSchema = z.object({
   tpmId: z.string(),
 });
 
-export const communicationSchema = z.object({
-  id: z.string().optional(),
+export const communicationInputSchema = z.object({
+  id: z.string(),
   type: z.string(),
   header: z.string().min(1).max(50).nullable(),
   content: z.string().min(1).max(1000).nullable(),
   date: z.date(),
   partnerProjectId: z.string().nullable(),
-  senderId: z.string(),
   recipientId: z.string(),
 });
+
+export const communicationSchema = communicationInputSchema.extend({
+  senderId: z.string(),
+  partnerProject: partnerProjectSchema.pick({ jiraProject: true }),
+  sender: userDetails.pick({ email: true }),
+});
+
+export type CommunicationWithAggregations = z.infer<typeof communicationSchema>;

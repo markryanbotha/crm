@@ -10,7 +10,7 @@ import {
 } from "./CreateOrEditProject";
 import { ProjectDeleteModalButton } from "./DeleteProject";
 import { PartnerSelect } from "./PartnerSelect";
-import { TPMSelect } from "./TPMSelect";
+import { TPMSelect } from "./TpmSelect";
 
 // TODO need TPM select Component
 

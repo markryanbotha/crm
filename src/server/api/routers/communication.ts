@@ -1,17 +1,18 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { communicationSchema } from "~/server/types";
+import { communicationInputSchema, communicationSchema } from "~/server/types";
 
 export const communicationRouter = createTRPCRouter({
   getAllMessages: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.communication.findMany({
+    const messages = await ctx.prisma.communication.findMany({
       include: {
-        PartnerProject: { select: { jiraProject: true } },
-        recipient: { select: { email: true } },
+        partnerProject: { select: { jiraProject: true } },
+        sender: { select: { email: true } },
       },
     });
+    return communicationSchema.array().parse(messages);
   }),
   sendMessage: protectedProcedure
-    .input(communicationSchema.omit({ id: true, senderId: true }))
+    .input(communicationInputSchema)
     .mutation(async ({ ctx, input }) => {
       const senderId = ctx.session.user.id;
       return await ctx.prisma.communication.create({
@@ -19,7 +20,7 @@ export const communicationRouter = createTRPCRouter({
       });
     }),
   editMessage: protectedProcedure
-    .input(communicationSchema)
+    .input(communicationInputSchema)
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.user.update({
         where: { id: input.id },

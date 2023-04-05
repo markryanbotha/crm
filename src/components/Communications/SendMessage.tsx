@@ -7,7 +7,7 @@ import {
 import { RecipientSelect } from "./RecipientSelect";
 import { useForm, type UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { communicationSchema } from "~/server/types";
+import { communicationInputSchema } from "~/server/types";
 import type { Communication } from "@prisma/client";
 import { SelectArrow } from "../common";
 import { ProjectSelect } from "./ProjectSelect";
@@ -97,6 +97,7 @@ const ContactForm = ({ isOpenState, formState }: ContactFormProps) => {
                   >
                     <option>Email</option>
                     <option>Jira Ticket</option>
+                    <option>Meeting Notes</option>
                   </select>
                 </div>
               </div>
@@ -140,7 +141,7 @@ const SendMessage = () => {
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   const formState = useForm<Communication>({
     resolver: zodResolver(
-      communicationSchema.omit({ senderId: true, date: true }) // Omitting senderId and Date as those will be filled in automatically
+      communicationInputSchema.omit({ date: true }) // Omitting Date as it will be filled in automatically
     ),
   });
 
