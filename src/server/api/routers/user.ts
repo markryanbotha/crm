@@ -20,7 +20,9 @@ export const userRouter = createTRPCRouter({
         data: { email: input.email, role: input.role },
       });
     }),
-
+  getAllAdminUsers: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.user.findMany({ where: { role: "Admin" } });
+  }),
   assignPartner: protectedProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {

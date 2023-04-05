@@ -1,44 +1,48 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Partner } from "@prisma/client";
+import type { PartnerProject } from "@prisma/client";
 import { type BaseSyntheticEvent, useState } from "react";
 import { useForm } from "react-hook-form";
-import { partnerSchema } from "~/server/types";
+import { partnerProjectSchema } from "~/server/types";
 import { api } from "~/utils/api";
 import {
   type BaseModalProps,
   CreateOrEditModal,
 } from "../Table/CreateOrEditModal";
-import { partnerColumns } from "./PartnerTable";
+import { projectColumns } from "./ProjectTable";
 
-export const PartnerCreateOrEditModal = ({
+export const ProjectCreateOrEditModal = ({
   data,
   isOpenState,
   type,
-}: BaseModalProps<Partner>) => {
+}: BaseModalProps<PartnerProject>) => {
   const [, setIsOpen] = isOpenState;
   const utils = api.useContext();
+
   const formControls = useForm({
     defaultValues: data,
-    resolver: zodResolver(partnerSchema),
+    resolver: zodResolver(partnerProjectSchema),
   });
-  const createOrEditPartner =
-    type === "edit" ? api.partner.updatePartner : api.partner.createPartner;
 
-  // TODO error handling and validation
-  const upsertPartner = createOrEditPartner.useMutation({
-    async onMutate(partner) {
-      await utils.partner.getAllPartners.cancel();
-      return partner;
+  const createOrEditProject =
+    type === "edit"
+      ? api.project.updatePartnerProject
+      : api.project.createPartnerProject;
+
+  const upsertProject = createOrEditProject.useMutation({
+    async onMutate(project) {
+      await utils.project.getAllPartnerProjects.cancel();
+      return project;
     },
     async onSettled() {
-      await utils.partner.getAllPartners.invalidate();
+      await utils.project.getAllPartnerProjects.invalidate();
       formControls.reset();
     },
   });
 
-  const onSubmit = async (data: Partner, event?: BaseSyntheticEvent) => {
+  const onSubmit = async (data: PartnerProject, event?: BaseSyntheticEvent) => {
     event?.preventDefault();
-    upsertPartner.mutate(data);
+    console.log(data);
+    upsertProject.mutate(data);
     await utils.invalidate();
     setIsOpen(false);
   };
@@ -52,18 +56,18 @@ export const PartnerCreateOrEditModal = ({
       isOpenState={isOpenState}
       onSubmit={onSubmit}
       formControls={formControls}
-      columns={partnerColumns}
+      columns={projectColumns}
     />
   );
 };
 
-export const PartnerCreateModalButton = () => {
+export const ProjectCreateModalButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <PartnerCreateOrEditModal
+      <ProjectCreateOrEditModal
         header="Create New Partner"
-        columns={partnerColumns}
+        columns={projectColumns}
         type={"create"}
         isOpenState={[isOpen, setIsOpen]}
       />
@@ -71,20 +75,20 @@ export const PartnerCreateModalButton = () => {
         onClick={() => setIsOpen(true)}
         className="inline-block rounded-lg bg-sky-600 px-4 py-2 font-medium text-white duration-150 hover:bg-sky-500 active:bg-sky-700 md:text-sm"
       >
-        Add partner
+        Create Project
       </button>
     </>
   );
 };
 
-export const PartnerEditModalButton = ({ data }: { data?: Partner }) => {
+export const ProjectEditModalButton = ({ data }: { data?: PartnerProject }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <PartnerCreateOrEditModal
+      <ProjectCreateOrEditModal
         data={data}
         header="Edit Partner Details"
-        columns={partnerColumns}
+        columns={projectColumns}
         type={"edit"}
         isOpenState={[isOpen, setIsOpen]}
       />

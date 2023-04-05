@@ -5,7 +5,7 @@ import { api } from "~/utils/api";
 import { type UserDetails, userDetails } from "~/server/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
-import { Loading } from "~/components/common";
+import { Loading, SelectArrow } from "~/components/common";
 
 const SelectPartner: FC<{ register: UseFormRegister<UserDetails> }> = ({
   register,
@@ -18,18 +18,7 @@ const SelectPartner: FC<{ register: UseFormRegister<UserDetails> }> = ({
     <div>
       <label className="font-medium">Company</label>
       <div className="relative">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="absolute top-0 bottom-0 right-2.5 my-auto h-6 w-6 text-gray-400"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fillRule="evenodd"
-            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-            clipRule="evenodd"
-          />
-        </svg>
+        <SelectArrow />
         <select
           className="w-full appearance-none rounded-md border bg-white p-2.5 text-gray-500 shadow-sm outline-none focus:border-indigo-600"
           {...register("partner")}
@@ -111,18 +100,7 @@ const Login = () => {
             <div>
               <label className="font-medium">Role</label>
               <div className="relative">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="absolute top-0 bottom-0 right-2.5 my-auto h-6 w-6 text-gray-400"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                <SelectArrow />
                 <select
                   className="w-full appearance-none rounded-md border bg-white p-2.5 text-gray-500 shadow-sm outline-none focus:border-sky-600"
                   {...register("role", {

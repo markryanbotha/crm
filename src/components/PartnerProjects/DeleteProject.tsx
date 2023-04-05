@@ -5,36 +5,36 @@ import {
   DeleteModalButton,
 } from "../Table/DeleteModal";
 
-export const PartnerDeleteModalButton = ({
+export const ProjectDeleteModalButton = ({
   id,
   name,
 }: BaseDeleteModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const utils = api.useContext();
-  const deletePartner = api.partner.deletePartner.useMutation({
+  const deleteProject = api.project.deletePartnerProject.useMutation({
     onMutate: async (id) => {
-      await utils.partner.getAllPartners.cancel();
+      await utils.project.getAllPartnerProjects.cancel();
       return id;
     },
     onSettled: async () => {
-      await utils.partner.getAllPartners.invalidate();
+      await utils.project.getAllPartnerProjects.invalidate();
     },
   });
 
   const handleDelete = (id: string | undefined) => {
     if (!id) {
-      throw new Error("The ID was not defined for the Partner");
+      throw new Error("The ID was not defined for the Project");
     }
-    deletePartner.mutate(id);
+    deleteProject.mutate(id);
     setIsOpen(false);
   };
 
   return (
     <DeleteModalButton
       isOpenState={[isOpen, setIsOpen]}
-      name={name}
+      name={name} // TODO, this will need to be made generic
       handleDelete={() => handleDelete(id)}
-      deleteType="partner"
+      deleteType="project"
     />
   );
 };

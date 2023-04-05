@@ -1,5 +1,10 @@
 # Partner Relational Management System
 
+To-Do
+
+- [ ] Error handling and validation for all forms
+- [ ] Optimistic updates
+
 ## Overview
 
 The is a web application to allow Project Managers and Users to share a central repository of information. It will include important information such as contact information and key details about the Partner and their projects. It will also allow the users to track communications with each other, such as meeting notes and emails.

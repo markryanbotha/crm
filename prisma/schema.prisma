@@ -43,9 +43,9 @@ model Partner {
 model PartnerProject {
   id             String          @id @default(cuid())
   deviceType     String
-  jiraProject    String[]
-  partner        Partner?        @relation(fields: [partnerId], references: [id])
-  partnerId      String?
+  jiraProject    String
+  partner        Partner        @relation(fields: [partnerId], references: [id])
+  partnerId      String
   tpm            User            @relation(fields: [tpmId], references: [id])
   tpmId          String
   communications Communication[]

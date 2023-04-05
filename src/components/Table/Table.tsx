@@ -9,6 +9,8 @@ export type TableItem = {
 export type ColumnDefinitionType<T extends TableItem, K extends keyof T> = {
   key: K;
   header: string;
+  customInputField?: JSX.Element;
+  path?: string;
 };
 
 interface TableProps<T extends TableItem, K extends keyof T> {
@@ -53,7 +55,7 @@ const Table = <T extends TableItem, K extends keyof T>({
                     {column.header}
                   </th>
                 ))}
-                <th className="py-3 px-6">Actions</th>
+                <th className="py-3 px-8">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y text-white">

@@ -3,6 +3,7 @@ import {
   type Dispatch,
   type SetStateAction,
   type BaseSyntheticEvent,
+  cloneElement,
 } from "react";
 import { type UseFormReturn, type FieldValues } from "react-hook-form";
 import type { ColumnDefinitionType, TableItem } from "./Table";
@@ -75,14 +76,26 @@ export const CreateOrEditModal = <T extends TableItem & FieldValues>({
                   <label className="text-start text-gray-800">
                     {value.header}
                   </label>
-                  <input
-                    type="text"
-                    aria-invalid={errors[value.key] ? "true" : "false"}
-                    className={`w-full rounded-lg border bg-transparent py-2 pl-2 pr-3 pb-2 text-gray-700 shadow-sm outline-none focus:border-sky-600${
-                      errors[value.key] ? " border-red-500" : ""
-                    }`}
-                    {...register(value.key as any, { required: true })}
-                  />
+                  {errors[value.key] ? (
+                    <label className="text-xs text-red-500">
+                      {errors[value.key]?.message?.toString()}
+                    </label>
+                  ) : null}
+                  {value.customInputField ? (
+                    cloneElement(value.customInputField, {
+                      error: errors[value.key],
+                      register,
+                    })
+                  ) : (
+                    <input
+                      type="text"
+                      aria-invalid={errors[value.key] ? "true" : "false"}
+                      className={`w-full rounded-lg border bg-transparent py-2 pl-2 pr-3 pb-2 text-gray-700 shadow-sm outline-none focus:border-sky-600${
+                        errors[value.key] ? " border-red-500" : ""
+                      }`}
+                      {...register(value.key as any, { required: true })}
+                    />
+                  )}
                 </div>
               ))}
               <button className="mt-3 block w-full rounded-lg bg-sky-600 py-3 px-4 text-center text-sm font-medium text-white ring-sky-600 ring-offset-2 hover:bg-sky-500 focus:ring-2 active:bg-sky-700">

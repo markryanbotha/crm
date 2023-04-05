@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const partnerSchema = z.object({
   id: z.string().optional(),
-  name: z.string(),
+  name: z.string().min(4),
   email: z.string().nullable(),
   phone: z.string().nullable().optional(),
   territory: z.string().nullable(),
@@ -22,3 +22,11 @@ export const userDetails = z.object({
 });
 
 export type UserDetails = z.infer<typeof userDetails>;
+
+export const partnerProjectSchema = z.object({
+  id: z.string().optional(),
+  deviceType: z.string(),
+  jiraProject: z.string(),
+  partnerId: z.string(),
+  tpmId: z.string(),
+});

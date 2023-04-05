@@ -28,7 +28,7 @@ const PartnerTable = () => {
       data={partnerData}
       createModalButton={<PartnerCreateModalButton />}
       editModalButton={<PartnerEditModalButton />}
-      deleteModalButton={<PartnerDeleteModalButton />}
+      deleteModalButton={<PartnerDeleteModalButton deleteType="partner"/>}
     />
   );
 };
