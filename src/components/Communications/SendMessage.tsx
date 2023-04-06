@@ -141,7 +141,7 @@ const SendMessage = () => {
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   const formState = useForm<Communication>({
     resolver: zodResolver(
-      communicationInputSchema.omit({ date: true }) // Omitting Date as it will be filled in automatically
+      communicationInputSchema.omit({ id: true, date: true }) // Omitting ID and Date as they will be filled in automatically
     ),
   });
 

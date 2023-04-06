@@ -32,7 +32,7 @@ export const partnerProjectSchema = z.object({
 });
 
 export const communicationInputSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   type: z.string(),
   header: z.string().min(1).max(50).nullable(),
   content: z.string().min(1).max(1000).nullable(),
@@ -42,6 +42,7 @@ export const communicationInputSchema = z.object({
 });
 
 export const communicationSchema = communicationInputSchema.extend({
+  id: z.string(),
   senderId: z.string(),
   partnerProject: partnerProjectSchema.pick({ jiraProject: true }),
   sender: userDetails.pick({ email: true }),

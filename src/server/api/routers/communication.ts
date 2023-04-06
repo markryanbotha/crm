@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { communicationInputSchema, communicationSchema } from "~/server/types";
 
@@ -20,7 +21,7 @@ export const communicationRouter = createTRPCRouter({
       });
     }),
   editMessage: protectedProcedure
-    .input(communicationInputSchema)
+    .input(communicationInputSchema.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.user.update({
         where: { id: input.id },

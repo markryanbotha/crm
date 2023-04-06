@@ -41,7 +41,7 @@ const Cards = ({ data }: CardsProps) => {
                   </span>
                   <span className="flex items-center text-gray-500">
                     <svg
-                      className="h-5 w-5 mr-2"
+                      className="mr-2 h-5 w-5"
                       viewBox="0 0 24 24"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -65,15 +65,15 @@ const Cards = ({ data }: CardsProps) => {
                   </span>
                 </div>
               </div>
-              <div className="mt-4 items-center space-y-4 text-sm sm:flex sm:space-x-4 sm:space-y-0">
+              <div className="mt-4 items-center justify-end space-y-4 text-sm sm:flex sm:space-x-4 sm:space-y-0">
                 <span className="flex items-center text-gray-500">
-                  Project:{" "}
-                  <Link href="/dashboard/projects" className="text-gray-800">
+                  {message.type} about project{" "}
+                  <Link
+                    href="/dashboard/projects"
+                    className="pl-1 text-sky-700"
+                  >
                     {message.partnerProject.jiraProject}
                   </Link>
-                </span>
-                <span className="flex items-center text-gray-500">
-                  Type: {message.type}
                 </span>
               </div>
             </div>
