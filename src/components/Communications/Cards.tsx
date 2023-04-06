@@ -1,8 +1,5 @@
 import { formatRelative } from "date-fns";
 import Link from "next/link";
-import { api } from "~/utils/api";
-import { Loading } from "../common";
-import MessageNavigation from "./MessageNavigation";
 import { type CommunicationWithAggregations } from "~/server/types";
 
 type CardsProps = {
@@ -11,7 +8,7 @@ type CardsProps = {
 
 const Cards = ({ data }: CardsProps) => {
   return (
-    <section className="mx-auto mt-12  px-4 md:px-8">
+    <section className="mt-1 px-4 md:px-8 w-full">
       <ul className="mt-12 space-y-6">
         {data.map((message, idx) => (
           <li key={idx} className="rounded-md bg-white p-5 shadow-sm">
@@ -84,19 +81,4 @@ const Cards = ({ data }: CardsProps) => {
   );
 };
 
-const AllCommunications = () => {
-  const { data, isLoading, isError, error } =
-    api.communication.getAllMessages.useQuery();
-
-  if (isLoading) return <Loading />;
-  if (isError) return <p>There was an error: {error.message}</p>;
-
-  return (
-    <div className="mx-auto w-full max-w-screen-xl px-4 md:px-8">
-      <MessageNavigation />
-      <Cards data={data} />
-    </div>
-  );
-};
-
-export default AllCommunications;
+export default Cards;

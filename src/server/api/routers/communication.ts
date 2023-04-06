@@ -12,6 +12,26 @@ export const communicationRouter = createTRPCRouter({
     });
     return communicationSchema.array().parse(messages);
   }),
+  getSentMessages: protectedProcedure.query(async ({ ctx }) => {
+    const messages = await ctx.prisma.communication.findMany({
+      where: { senderId: ctx.session.user.id },
+      include: {
+        partnerProject: { select: { jiraProject: true } },
+        sender: { select: { email: true } },
+      },
+    });
+    return communicationSchema.array().parse(messages);
+  }),
+  getReceivedMessages: protectedProcedure.query(async ({ ctx }) => {
+    const messages = await ctx.prisma.communication.findMany({
+      where: { recipientId: ctx.session.user.id },
+      include: {
+        partnerProject: { select: { jiraProject: true } },
+        sender: { select: { email: true } },
+      },
+    });
+    return communicationSchema.array().parse(messages);
+  }),
   sendMessage: protectedProcedure
     .input(communicationInputSchema)
     .mutation(async ({ ctx, input }) => {
