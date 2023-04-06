@@ -13,11 +13,11 @@ export const ProjectDeleteModalButton = ({
   const utils = api.useContext();
   const deleteProject = api.project.deletePartnerProject.useMutation({
     onMutate: async (id) => {
-      await utils.project.getAllPartnerProjects.cancel();
+      await utils.project.getAllProjectsForUser.cancel();
       return id;
     },
     onSettled: async () => {
-      await utils.project.getAllPartnerProjects.invalidate();
+      await utils.project.getAllProjectsForUser.invalidate();
     },
   });
 

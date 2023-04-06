@@ -9,7 +9,7 @@ type ProjectSelectProps = {
 };
 export const ProjectSelect = ({ register, error }: ProjectSelectProps) => {
   const { data, isLoading, isError } =
-    api.project.getAllPartnerProjects.useQuery();
+    api.project.getAllProjectsForUser.useQuery();
   const selectProps = {
     ...(register && register("partnerProjectId", { required: true })),
   };

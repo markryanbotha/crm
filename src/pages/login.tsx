@@ -38,7 +38,9 @@ const Login = () => {
   const signUp = api.user.signUp.useMutation();
   const assignPartner = api.partner.addUserToPartner.useMutation();
   const { register, handleSubmit } = useForm<UserDetails>({
-    resolver: zodResolver(userDetails.partial()),
+    resolver: zodResolver(
+      userDetails.pick({ email: true, role: true, partner: true })
+    ),
   });
 
   const router = useRouter();

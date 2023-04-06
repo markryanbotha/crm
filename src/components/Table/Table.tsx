@@ -45,7 +45,7 @@ const Table = <T extends TableItem, K extends keyof T>({
         </div>
         <div className="mt-3 md:mt-0">{createModalButton}</div>
       </div>
-      {data ? (
+      {data.length !== 0 ? (
         <div className="mt-12 overflow-x-auto rounded-lg border shadow-sm">
           <table className="w-full table-auto text-left text-sm">
             <thead className="border-b bg-gray-50 font-medium text-gray-600">
@@ -70,6 +70,15 @@ const Table = <T extends TableItem, K extends keyof T>({
               ))}
             </tbody>
           </table>
+        </div>
+      ) : data ? (
+        <div className="mt-[10rem] flex w-full flex-col items-center justify-center gap-4">
+          <p className="text-s text-white-300 font-medium sm:text-5xl">
+            No Data Available
+          </p>
+          <p className="">
+            Create new records by clicking the create button above
+          </p>
         </div>
       ) : (
         <div className="flex w-full items-center justify-center py-20">

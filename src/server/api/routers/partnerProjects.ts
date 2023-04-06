@@ -15,6 +15,30 @@ export const partnerProjectRouter = createTRPCRouter({
       },
     });
   }),
+  getAllProjectsForUser: protectedProcedure.query(async ({ ctx }) => {
+    const user = ctx.session.user;
+
+    // If the user is an Admin, then return all projects
+    if (user.role === "Admin") {
+      return await ctx.prisma.partnerProject.findMany({
+        include: {
+          partner: { select: { name: true } },
+          tpm: { select: { email: true } },
+        },
+      });
+    }
+
+    // Only return projects that belong to that specific partner
+    return await ctx.prisma.partnerProject.findMany({
+      where: {
+        partnerId: user.partnerId,
+      },
+      include: {
+        partner: { select: { name: true } },
+        tpm: { select: { email: true } },
+      },
+    });
+  }),
   createPartnerProject: protectedProcedure
     .input(partnerProjectSchema)
     .mutation(async ({ ctx, input }) => {

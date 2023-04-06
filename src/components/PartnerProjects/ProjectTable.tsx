@@ -36,7 +36,7 @@ export const projectColumns: ColumnDefinitionType<
 
 const ProjectTable = () => {
   const { data, isLoading, isError } =
-    api.project.getAllPartnerProjects.useQuery();
+    api.project.getAllProjectsForUser.useQuery();
 
   if (isLoading) return <Loading />;
 

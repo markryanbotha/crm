@@ -30,11 +30,11 @@ export const ProjectCreateOrEditModal = ({
 
   const upsertProject = createOrEditProject.useMutation({
     async onMutate(project) {
-      await utils.project.getAllPartnerProjects.cancel();
+      await utils.project.getAllProjectsForUser.cancel();
       return project;
     },
     async onSettled() {
-      await utils.project.getAllPartnerProjects.invalidate();
+      await utils.project.getAllProjectsForUser.invalidate();
       formControls.reset();
     },
   });

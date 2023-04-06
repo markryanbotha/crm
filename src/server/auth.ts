@@ -15,10 +15,12 @@ declare module "next-auth" {
       id: string;
       email: string;
       role: UserRole;
+      partnerId: string;
     };
   }
   interface User {
     role: UserRole;
+    partnerId: string;
   }
 }
 
@@ -29,6 +31,7 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.email = user.email;
         token.role = user.role;
+        token.partner = user.partnerId;
       }
 
       return token;
@@ -38,6 +41,7 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id as string;
         session.user.email = token.email as string;
         session.user.role = token.role as UserRole;
+        session.user.partnerId = token.partner as string;
       }
 
       return session;
@@ -72,7 +76,16 @@ export const authOptions: NextAuthOptions = {
           throw new Error("User has an invalid role");
         }
 
-        return { id: user.id, email: user.email, role: user.role };
+        if (!user.partnerId) {
+          throw new Error("User is not assigned to a Partner");
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+          partnerId: user.partnerId,
+        };
       },
     }),
   ],

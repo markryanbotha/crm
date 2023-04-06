@@ -9,7 +9,9 @@ const Navbar = () => {
   const router = useRouter();
 
   const navigation = [
-    { title: "Partners", path: "/dashboard/partners" },
+    ...(sessionData?.user.role === "Admin"
+      ? [{ title: "Partners", path: "/dashboard/partners" }]
+      : []), // Only add this navigation option if the user is an admin
     { title: "Projects", path: "/dashboard/projects" },
     { title: "Communications", path: "/dashboard/communications" },
   ];

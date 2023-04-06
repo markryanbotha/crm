@@ -1,7 +1,13 @@
 import { Navbar } from "~/components/Layouts";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 const Home = () => {
+  const { data: sessionData } = useSession();
+  const getStartedPageUrl =
+    sessionData?.user.role === "Admin"
+      ? "/dashboard/partners"
+      : "/dashboard/projects";
   return (
     <div className="flex min-h-screen flex-col bg-gray-900">
       <Navbar />
@@ -13,14 +19,14 @@ const Home = () => {
             </h2>
             <p className="mx-auto max-w-2xl text-gray-400">
               This acts as a central knowledge base for Partners and Project
-              Managers to gather contact information and communicate 
+              Managers to gather contact information and communicate
             </p>
             <form
               onSubmit={(e) => e.preventDefault()}
               className="items-center justify-center gap-x-3 sm:flex"
             >
               <Link
-                href="/dashboard/partners"
+                href={getStartedPageUrl}
                 className="mt-3 flex w-full items-center justify-center gap-x-2 rounded-lg bg-sky-500 py-2.5 px-4 text-sm font-medium text-white duration-150 hover:bg-sky-400 active:bg-sky-600 sm:mt-0 sm:w-auto"
               >
                 Get started
