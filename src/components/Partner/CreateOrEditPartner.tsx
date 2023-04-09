@@ -24,7 +24,6 @@ export const PartnerCreateOrEditModal = ({
   const createOrEditPartner =
     type === "edit" ? api.partner.updatePartner : api.partner.createPartner;
 
-  // TODO error handling and validation
   const upsertPartner = createOrEditPartner.useMutation({
     async onMutate(partner) {
       await utils.partner.getAllPartners.cancel();

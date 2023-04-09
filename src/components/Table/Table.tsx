@@ -76,9 +76,7 @@ const Table = <T extends TableItem, K extends keyof T>({
           <p className="text-s text-white-300 font-medium sm:text-5xl">
             No Data Available
           </p>
-          <p className="">
-            Create new records by clicking the create button above
-          </p>
+          <p>Create new {heading} by clicking the create button above</p>
         </div>
       ) : (
         <div className="flex w-full items-center justify-center py-20">

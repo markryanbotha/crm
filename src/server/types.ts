@@ -2,17 +2,16 @@ import { z } from "zod";
 
 export const partnerSchema = z.object({
   id: z.string().optional(),
-  name: z.string().min(4),
-  email: z.string().nullable(),
-  phone: z.string().nullable().optional(),
-  territory: z.string().nullable(),
+  name: z.string().min(1, "The name of the partner must be defined"),
+  email: z.string().email(),
+  phone: z
+    .string()
+    .regex(
+      /((\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}/,
+      "The phone number is invalid, please ensure that it begins with 0 or an area code, followed by 10 digits"
+    ),
+  territory: z.string().min(2).max(3),
   summary: z.string().nullable(),
-});
-
-export const userDetailsWithId = z.object({
-  id: z.string(),
-  email: z.string(),
-  role: z.union([z.literal("Admin"), z.literal("User")]),
 });
 
 export const userDetails = z.object({
@@ -21,12 +20,16 @@ export const userDetails = z.object({
   partner: z.string().optional(),
 });
 
+export const userDetailsWithId = userDetails.extend({
+  id: z.string(),
+});
+
 export type UserDetails = z.infer<typeof userDetails>;
 
 export const partnerProjectSchema = z.object({
   id: z.string().optional(),
-  deviceType: z.string(),
-  jiraProject: z.string(),
+  deviceType: z.string().min(1, "You must defined the device type"),
+  jiraProject: z.string().min(1, "The Jira Project ID must be defined"),
   partnerId: z.string(),
   tpmId: z.string(),
 });

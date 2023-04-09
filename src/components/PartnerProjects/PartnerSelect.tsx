@@ -14,6 +14,7 @@ export const PartnerSelect = ({ register, error }: PartnerSelectProps) => {
     isLoading,
     isError,
   } = api.partner.getAllPartners.useQuery();
+
   const selectProps = {
     ...(register && register("partnerId", { required: true })),
   };

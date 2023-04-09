@@ -13,6 +13,12 @@ export const partnerRouter = createTRPCRouter({
     return partners.map((partner) => partner.name);
   }),
   getAllPartners: protectedProcedure.query(async ({ ctx }) => {
+    // If the user is not an admin, only return their respective partner
+    if (ctx.session.user.role === "User") {
+      return await ctx.prisma.partner.findMany({
+        where: { id: ctx.session.user.partnerId },
+      });
+    }
     return await ctx.prisma.partner.findMany();
   }),
   createPartner: adminProcedure

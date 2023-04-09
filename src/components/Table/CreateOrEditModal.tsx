@@ -33,20 +33,26 @@ export const CreateOrEditModal = <T extends TableItem & FieldValues>({
     handleSubmit,
     register,
     formState: { errors },
+    reset,
   } = formControls;
+
+  const handleClose = () => {
+    setIsOpen(false);
+    reset();
+  };
 
   return isOpen ? (
     <div className="fixed inset-0 z-10 overflow-y-auto">
       <div
         className="fixed inset-0 h-full w-full bg-black opacity-40"
-        onClick={() => setIsOpen(false)}
+        onClick={() => handleClose()}
       />
       <div className="flex min-h-screen items-center px-4 py-8">
         <div className="relative mx-auto w-full max-w-lg rounded-md bg-white p-4 shadow-lg">
           <div className="flex justify-end">
             <button
               className="rounded-md p-2 text-gray-400 hover:bg-gray-100"
-              onClick={() => setIsOpen(false)}
+              onClick={() => handleClose()}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -89,11 +95,10 @@ export const CreateOrEditModal = <T extends TableItem & FieldValues>({
                   ) : (
                     <input
                       type="text"
-                      aria-invalid={errors[value.key] ? "true" : "false"}
                       className={`w-full rounded-lg border bg-transparent py-2 pl-2 pr-3 pb-2 text-gray-700 shadow-sm outline-none focus:border-sky-600${
                         errors[value.key] ? " border-red-500" : ""
                       }`}
-                      {...register(value.key as any, { required: true })}
+                      {...register(value.key as any)}
                     />
                   )}
                 </div>

@@ -76,6 +76,10 @@ export const authOptions: NextAuthOptions = {
           throw new Error("User has an invalid role");
         }
 
+        if (user.role === "Admin") {
+          user.partnerId = "Admin"; // Admins are not assigned to a specific Partner, thus, assign an Admin partnerId
+        }
+
         if (!user.partnerId) {
           throw new Error("User is not assigned to a Partner");
         }
