@@ -1,5 +1,4 @@
 import type { Dispatch, SetStateAction } from "react";
-import FilterMessages from "./FilterMessages";
 import SendMessage from "./SendMessage";
 
 export type CommunicationType = "All" | "Sent" | "Received";
@@ -25,7 +24,6 @@ const MessageNavigation = ({
           </p>
         </div>
         <div className="mt-6 ml-auto items-center gap-x-3 sm:flex md:mt-0">
-          <FilterMessages />
           <SendMessage />
         </div>
       </div>
@@ -33,7 +31,6 @@ const MessageNavigation = ({
       <div className="mt-6">
         <ul className="flex w-full items-center gap-x-3 overflow-x-auto border-b border-gray-700">
           {navigation.map((type, idx) => (
-            // Replace [idx == 0] with [window.location.pathname == item.path] or create your own logic
             <li
               key={idx}
               className={`border-b-2 py-2 ${
