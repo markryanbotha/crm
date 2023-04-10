@@ -15,7 +15,7 @@ export const partnerSchema = z.object({
 });
 
 export const userDetails = z.object({
-  email: z.string(),
+  email: z.string().email(),
   role: z.union([z.literal("Admin"), z.literal("User")]),
   partner: z.string().optional(),
 });
