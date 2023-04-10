@@ -26,6 +26,7 @@ export const ProjectSelect = ({ register, error }: ProjectSelectProps) => {
         }`}
         {...selectProps}
       >
+        <option>Not project related</option>
         {data.map(({ id, jiraProject }, index) => (
           <option key={index} value={id}>
             {jiraProject}

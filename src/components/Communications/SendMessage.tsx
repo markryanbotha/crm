@@ -41,6 +41,11 @@ const ContactForm = ({ isOpenState, formState }: ContactFormProps) => {
   const onSubmit = async (data: Communication, event?: BaseSyntheticEvent) => {
     event?.preventDefault();
     const date = new Date();
+
+    // Remove the project ID if it is not related
+    if (data.partnerProjectId === "Not project related") {
+      data.partnerProjectId = null;
+    }
     await sendMessage.mutateAsync({ ...data, date });
     reset();
     setIsOpen(false);

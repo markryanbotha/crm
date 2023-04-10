@@ -8,7 +8,7 @@ type RecipientSelectProps = {
   error?: FieldError;
 };
 export const RecipientSelect = ({ register, error }: RecipientSelectProps) => {
-  const { data, isLoading, isError } = api.user.getAllAdminUsers.useQuery();
+  const { data, isLoading, isError } = api.user.getAllUsers.useQuery();
   const selectProps = {
     ...(register && register("recipientId", { required: true })),
   };

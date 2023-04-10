@@ -64,15 +64,21 @@ const Cards = ({ data }: CardsProps) => {
                   </div>
                 </div>
                 <div className="mt-4 items-center justify-end space-y-4 text-sm sm:flex sm:space-x-4 sm:space-y-0">
-                  <span className="flex items-center text-gray-500">
-                    {message.type} about project{" "}
-                    <Link
-                      href="/dashboard/projects"
-                      className="pl-1 text-sky-700"
-                    >
-                      {message.partnerProject.jiraProject}
-                    </Link>
-                  </span>
+                  {message.partnerProject !== null ? (
+                    <span className="flex items-center text-gray-500">
+                      {message.type} about project{" "}
+                      <Link
+                        href="/dashboard/projects"
+                        className="pl-1 text-sky-700"
+                      >
+                        {message.partnerProject.jiraProject}
+                      </Link>
+                    </span>
+                  ) : (
+                    <span className="flex items-center text-gray-500">
+                      {message.type} that is not project specific
+                    </span>
+                  )}
                 </div>
               </div>
             </li>

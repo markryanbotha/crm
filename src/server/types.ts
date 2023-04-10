@@ -28,7 +28,7 @@ export type UserDetails = z.infer<typeof userDetails>;
 
 export const partnerProjectSchema = z.object({
   id: z.string().optional(),
-  deviceType: z.string().min(1, "You must defined the device type"),
+  deviceType: z.string().min(1, "The device type must be defined"),
   jiraProject: z.string().min(1, "The Jira Project ID must be defined"),
   partnerId: z.string(),
   tpmId: z.string(),
@@ -47,7 +47,7 @@ export const communicationInputSchema = z.object({
 export const communicationSchema = communicationInputSchema.extend({
   id: z.string(),
   senderId: z.string(),
-  partnerProject: partnerProjectSchema.pick({ jiraProject: true }),
+  partnerProject: partnerProjectSchema.pick({ jiraProject: true }).nullable(),
   sender: userDetails.pick({ email: true }),
 });
 

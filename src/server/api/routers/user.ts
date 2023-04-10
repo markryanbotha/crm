@@ -23,6 +23,9 @@ export const userRouter = createTRPCRouter({
   getAllAdminUsers: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.user.findMany({ where: { role: "Admin" } });
   }),
+  getAllUsers: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.user.findMany();
+  }),
   assignPartner: protectedProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
