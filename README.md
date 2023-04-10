@@ -12,7 +12,7 @@ It can be extended so that the application integrates directly with email, Jira 
 2. Click the `Get Started` button
 3. Sign up for an account
 
-   - You can insert any email address, it does not need to be valid
+   - You can insert any email address, it does not need to be a real email address
    - Select the appropriate role
 
 4. If you select the User role, select an existing `Company` at random
@@ -20,9 +20,14 @@ It can be extended so that the application integrates directly with email, Jira 
 
 If you have already completed steps 1-5 before, you can click the `Sign in` hyperlink to sign in using the same email address that you previously used.
 
-Currently, there is no distinction between Admin and User roles. However, in the future, and Admin will have access to all Partner Data, with the ability to edit, delete or create new partners. A User will only be able to access Partner data for their respective company, and will only be able to edit the details of their respective partner.
+As an Admin, you will have access to all Partners and Projects; as a user, you will have access to Projects related to your partner only, and cannot view other Partners.
 
-I still need to build out the `Projects` and `Communications` functionality. These tables will store the respective users projects information and previous communications. Admins will have access to all projects and all communications.
+The communications page can be used to send messages to any user. It updates the database so that all users can view relevant communications, as well as any messages that they have sent or received themselves
+
+## Test accounts to sign in with
+
+- Admin: admin@email.com
+- User: user@email
 
 ## Link to source code
 
