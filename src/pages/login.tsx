@@ -35,8 +35,8 @@ const SelectPartner: FC<{ register: UseFormRegister<UserDetails> }> = ({
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(false); // The page is in a Sign in state if this is true, otherwise, it is in a Sign up state if it is false
   const [role, setRole] = useState("Admin");
+  const [loading, setLoading] = useState(false);
   const signUp = api.user.signUp.useMutation();
-  const assignPartner = api.partner.addUserToPartner.useMutation();
   const { register, handleSubmit } = useForm<UserDetails>({
     resolver: zodResolver(
       userDetails.pick({ email: true, role: true, partner: true })
@@ -45,21 +45,20 @@ const Login = () => {
 
   const router = useRouter();
 
-  // TODO error handling and validation
   const onSubmit = async (
     { email, role, partner }: UserDetails,
     event?: BaseSyntheticEvent
   ) => {
     event?.preventDefault();
+    setLoading(true);
     if (!isSignIn) {
       const newUser = await signUp.mutateAsync({ email, role, partner });
 
-      if (!newUser || !partner) {
+      if (!newUser) {
         throw new Error("User could not sign up");
       }
-
-      assignPartner.mutate({ partnerName: partner, userId: newUser.id });
     }
+
     await signIn("credentials", {
       callbackUrl: (router.query?.callbackUrl as string) ?? "/",
       email,
@@ -119,7 +118,14 @@ const Login = () => {
           {role === "User" && !isSignIn ? (
             <SelectPartner register={register} />
           ) : null}
-          <button className="w-full rounded-lg bg-sky-600 px-4 py-2 font-medium text-white duration-150 hover:bg-sky-500 active:bg-sky-600">
+          <button
+            className={`w-full rounded-lg px-4 py-2 font-medium text-white duration-150 ${
+              loading
+                ? "bg-gray-400 hover:bg-gray-300 active:bg-gray-400"
+                : "bg-sky-600 hover:bg-sky-500 active:bg-sky-600"
+            }`}
+            disabled={loading}
+          >
             {isSignIn ? "Sign in" : "Sign up"}
           </button>
         </form>

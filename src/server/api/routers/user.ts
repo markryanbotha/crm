@@ -1,4 +1,3 @@
-import { z } from "zod";
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -26,13 +25,4 @@ export const userRouter = createTRPCRouter({
   getAllUsers: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.user.findMany();
   }),
-  assignPartner: protectedProcedure
-    .input(z.string())
-    .mutation(async ({ ctx, input }) => {
-      const userId = ctx.session.user.id;
-      return await ctx.prisma.user.update({
-        where: { id: userId },
-        data: { partner: { connect: { name: input } } },
-      });
-    }),
 });
