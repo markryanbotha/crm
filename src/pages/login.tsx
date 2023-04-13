@@ -6,6 +6,7 @@ import { type UserDetails, userDetails } from "~/server/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
 import { Loading, SelectArrow } from "~/components/common";
+import { TRPCClientError } from "@trpc/client";
 
 const SelectPartner: FC<{ register: UseFormRegister<UserDetails> }> = ({
   register,
@@ -35,9 +36,15 @@ const SelectPartner: FC<{ register: UseFormRegister<UserDetails> }> = ({
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(false); // The page is in a Sign in state if this is true, otherwise, it is in a Sign up state if it is false
   const [role, setRole] = useState("Admin");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // Custom loading state to determine if the page is waiting for a response from the server. It is used to disable the sign in/up button
   const signUp = api.user.signUp.useMutation();
-  const { register, handleSubmit } = useForm<UserDetails>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+    clearErrors,
+  } = useForm<UserDetails>({
     resolver: zodResolver(
       userDetails.pick({ email: true, role: true, partner: true })
     ),
@@ -51,19 +58,55 @@ const Login = () => {
   ) => {
     event?.preventDefault();
     setLoading(true);
-    if (!isSignIn) {
-      const newUser = await signUp.mutateAsync({ email, role, partner });
-
-      if (!newUser) {
-        throw new Error("User could not sign up");
+    try {
+      // Sign-up
+      if (!isSignIn) {
+        const newUser = await signUp.mutateAsync({ email, role, partner });
+        if (!newUser) {
+          throw new Error("User could not sign up");
+        }
       }
-    }
+      const signInResponse = await signIn("credentials", {
+        redirect: false,
+        email,
+        role,
+      });
 
-    await signIn("credentials", {
-      callbackUrl: (router.query?.callbackUrl as string) ?? "/",
-      email,
-      role,
-    });
+      // Sign-in with details, or sign in with the newly sign-up account
+      if (signInResponse) {
+        const { ok, error } = signInResponse;
+        // If the sign-in is successful, redirect user to the home page, or to the page that they initially tried to visit
+        if (ok) {
+          await router.push((router.query?.callbackUrl as string) ?? "/");
+        }
+        // If there is an error, update the form state to refelct the error for the user
+        if (error) {
+          setError("email", {
+            type: "custom",
+            message: `The email could not be found, please try and sign up instead`,
+          });
+          setLoading(false);
+        }
+      }
+    } catch (e) {
+      // An error from TRPC will mean that the user is trying to create an account with an email address that already exists
+      if (e instanceof TRPCClientError) {
+        setError("email", {
+          type: "custom",
+          message:
+            "That email address is already signed up, please sign in instead",
+        });
+      } else {
+        // Catch all error message
+        setError("email", {
+          type: "custom",
+          message: "An Error Occurred",
+        });
+        // Rethrow error message for debugging
+        throw e;
+      }
+      setLoading(false);
+    }
   };
 
   return (
@@ -79,7 +122,10 @@ const Login = () => {
                 ? "Don't have an account? "
                 : "Already have an account? "}
               <button
-                onClick={() => setIsSignIn(!isSignIn)}
+                onClick={() => {
+                  setIsSignIn(!isSignIn);
+                  clearErrors();
+                }}
                 className="font-medium text-sky-600 hover:text-sky-500"
               >
                 {isSignIn ? "Sign up" : "Sign in"}
@@ -90,6 +136,12 @@ const Login = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-5">
           <div>
             <label className="font-medium">Email</label>
+            <br />
+            {errors.email ? (
+              <label className="text-xs text-red-500">
+                {errors.email.message}
+              </label>
+            ) : null}
             <input
               type="email"
               required
