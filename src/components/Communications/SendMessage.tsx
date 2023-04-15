@@ -31,10 +31,14 @@ const ContactForm = ({ isOpenState, formState }: ContactFormProps) => {
   const sendMessage = api.communication.sendMessage.useMutation({
     async onMutate(data) {
       await utils.communication.getAllMessages.cancel();
+      await utils.communication.getSentMessages.cancel();
+      await utils.communication.getReceivedMessages.cancel();
       return data;
     },
     async onSettled() {
       await utils.communication.getAllMessages.invalidate();
+      await utils.communication.getSentMessages.invalidate();
+      await utils.communication.getReceivedMessages.invalidate();
     },
   });
 
