@@ -7,9 +7,24 @@ import {
   PartnerEditModalButton,
 } from "./CreateOrEditPartner";
 import { PartnerDeleteModalButton } from "./DeletePartner";
+import Link from "next/link";
+
+type PartnerLinkProps = { data?: Partner };
+const PartnerLink = ({ data }: PartnerLinkProps) => {
+  if (!data) return null;
+
+  const url = `/dashboard/partners/${data.id}`;
+  if (url)
+    return (
+      <div className="m-0 my-auto text-center text-sky-600">
+        <Link href={url}>{data?.name}</Link>
+      </div>
+    );
+  return <p>{data?.name}</p>;
+};
 
 export const partnerColumns: ColumnDefinitionType<Partner, keyof Partner>[] = [
-  { key: "name", header: "Name" },
+  { key: "name", header: "Name", customDisplayField: <PartnerLink /> },
   { key: "email", header: "Email" },
   { key: "phone", header: "Phone" },
   { key: "territory", header: "Territory" },
@@ -28,7 +43,7 @@ const PartnerTable = () => {
       data={partnerData}
       createModalButton={<PartnerCreateModalButton />}
       editModalButton={<PartnerEditModalButton />}
-      deleteModalButton={<PartnerDeleteModalButton deleteType="partner"/>}
+      deleteModalButton={<PartnerDeleteModalButton deleteType="partner" />}
     />
   );
 };

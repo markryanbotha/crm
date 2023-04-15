@@ -27,7 +27,7 @@ The communications page can be used to send messages to any user. It updates the
 ## Test accounts to sign in with
 
 - Admin: admin@email.com
-- User: user@email
+- User: user@email.com
 
 ## Link to source code
 

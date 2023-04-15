@@ -10,6 +10,7 @@ export type ColumnDefinitionType<T extends TableItem, K extends keyof T> = {
   key: K;
   header: string;
   customInputField?: JSX.Element;
+  customDisplayField?: JSX.Element;
   path?: string;
 };
 

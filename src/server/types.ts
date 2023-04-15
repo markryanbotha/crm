@@ -16,15 +16,17 @@ export const partnerSchema = z.object({
 
 export const userDetails = z.object({
   email: z.string().email(),
+  name: z.string().min(1, "You must specify your name"),
+  jobTitle: z.string().min(1, "You must specify your Job Title"),
   role: z.union([z.literal("Admin"), z.literal("User")]),
   partner: z.string().optional(),
 });
 
+export type UserDetails = z.infer<typeof userDetails>;
+
 export const userDetailsWithId = userDetails.extend({
   id: z.string(),
 });
-
-export type UserDetails = z.infer<typeof userDetails>;
 
 export const partnerProjectSchema = z.object({
   id: z.string().optional(),

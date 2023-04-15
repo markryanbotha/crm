@@ -16,7 +16,12 @@ export const userRouter = createTRPCRouter({
       }
 
       return await ctx.prisma.user.create({
-        data: { email: input.email, role: input.role },
+        data: {
+          email: input.email,
+          role: input.role,
+          name: input.name,
+          jobTitle: input.jobTitle,
+        },
       });
     }),
   getAllAdminUsers: protectedProcedure.query(async ({ ctx }) => {

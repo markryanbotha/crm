@@ -14,8 +14,9 @@ model User {
   email                  String           @unique
   createdAt              DateTime         @default(now())
   updatedAt              DateTime         @updatedAt
-  name                   String?
+  name                   String
   role                   String
+  jobTitle               String
   projects               PartnerProject[]
   communicationsSent     Communication[]  @relation("sender")
   communicationsReceived Communication[]  @relation("recipient")
@@ -24,24 +25,21 @@ model User {
 }
 
 model Partner {
-  id               String           @id @default(cuid())
-  name             String           @unique
-  email            String           @unique
-  phone            String
-  projects         PartnerProject[]
-  territory        String
-  summary          String?
-  primaryContact   String?
-  technicalContact String?
-  legalContact     String?
-  employees        User[]
+  id        String           @id @default(cuid())
+  name      String           @unique
+  email     String           @unique
+  phone     String
+  projects  PartnerProject[]
+  territory String
+  summary   String?
+  employees User[]
 }
 
 model PartnerProject {
   id             String          @id @default(cuid())
   deviceType     String
   jiraProject    String
-  partner        Partner        @relation(fields: [partnerId], references: [id])
+  partner        Partner         @relation(fields: [partnerId], references: [id])
   partnerId      String
   tpm            User            @relation(fields: [tpmId], references: [id])
   tpmId          String

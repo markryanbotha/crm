@@ -21,6 +21,14 @@ export const partnerRouter = createTRPCRouter({
     }
     return await ctx.prisma.partner.findMany();
   }),
+  getEmployeesInPartner: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.partner.findFirst({
+        where: { id: input },
+        include: { employees: true },
+      });
+    }),
   createPartner: adminProcedure
     .input(partnerSchema)
     .mutation(async ({ ctx, input }) => {

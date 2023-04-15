@@ -19,7 +19,11 @@ export const TableRow = <T extends TableItem, K extends keyof T>({
     <tr>
       {columns.map((column, index) => (
         <td key={index} className="whitespace-nowrap px-6 py-4">
-          {column.path ? get(data, column.path) : data[column.key]}
+          {column.customDisplayField
+            ? cloneElement(column.customDisplayField, { data })
+            : column.path
+            ? get(data, column.path)
+            : data[column.key]}
         </td>
       ))}
       <td className="whitespace-nowrap px-6 text-left">
