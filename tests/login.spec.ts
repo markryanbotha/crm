@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { randomUUID } from "crypto";
 
-test.describe("Login and Signup", () => {
+test.describe("As an Admin, I can ensure security and privacy of partner data, including implementing appropriate access controls", () => {
   test("Can sign up as and Admin, and is redirected to the project page", async ({
     page,
   }) => {
