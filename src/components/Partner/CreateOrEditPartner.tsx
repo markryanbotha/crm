@@ -11,6 +11,7 @@ import {
 import { partnerColumns } from "./PartnerTable";
 
 export const PartnerCreateOrEditModal = ({
+  header,
   data,
   isOpenState,
   type,
@@ -41,8 +42,6 @@ export const PartnerCreateOrEditModal = ({
     await utils.invalidate();
     setIsOpen(false);
   };
-
-  const header = type === "edit" ? "Edit Details" : "Create New Partner";
 
   return (
     <CreateOrEditModal

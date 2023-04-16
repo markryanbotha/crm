@@ -11,6 +11,7 @@ import {
 import { projectColumns } from "./ProjectTable";
 
 export const ProjectCreateOrEditModal = ({
+  header,
   data,
   isOpenState,
   type,
@@ -46,8 +47,6 @@ export const ProjectCreateOrEditModal = ({
     setIsOpen(false);
   };
 
-  const header = type === "edit" ? "Edit Details" : "Create New Partner";
-
   return (
     <CreateOrEditModal
       header={header}
@@ -65,7 +64,7 @@ export const ProjectCreateModalButton = () => {
   return (
     <>
       <ProjectCreateOrEditModal
-        header="Create New Partner"
+        header="Create New Project"
         columns={projectColumns}
         type={"create"}
         isOpenState={[isOpen, setIsOpen]}
@@ -86,7 +85,7 @@ export const ProjectEditModalButton = ({ data }: { data?: PartnerProject }) => {
     <>
       <ProjectCreateOrEditModal
         data={data}
-        header="Edit Partner Details"
+        header="Edit Project Details"
         columns={projectColumns}
         type={"edit"}
         isOpenState={[isOpen, setIsOpen]}

@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("As a TPM, I can add and store partner contact information, including names, contact details, and roles ", () => {
   test.beforeEach(async ({ page }) => {
-    // Sign in as admin, and navigate to project page
+    // Sign in as admin, and navigate to partner page
     await page.goto("http://localhost:3000/");
     await page.getByRole("button", { name: "Log in" }).click();
     await page.getByRole("button", { name: "Sign in" }).click();
@@ -55,7 +55,7 @@ test.describe("As a TPM, I can add and store partner contact information, includ
 
     // Expect the modal to appear correctly
     await expect(
-      page.getByRole("heading", { name: "Edit Details" })
+      page.getByRole("heading", { name: "Edit Partner Details" })
     ).toBeVisible();
 
     // Fill in and submit form with new edited details
@@ -93,7 +93,7 @@ test.describe("As a TPM, I can add and store partner contact information, includ
   });
 
   test("As an Admin User, I can delete a partner", async ({ page }) => {
-    // Delete the project edited in the previous test
+    // Delete the partner that was edited in the previous test
     await page
       .getByRole("row", {
         name: "MockEditedPartner edited-mock@partner.com +55555555555 EST Edited Summary for E2E tests Edit Delete",
@@ -109,7 +109,7 @@ test.describe("As a TPM, I can add and store partner contact information, includ
     // Accept deletion
     await page.getByRole("button", { name: "Accept" }).click();
 
-    // Expect the project we deleted to not be visible
+    // Expect the partner that was deleted to not be visible
     await expect(
       page.getByRole("cell", { name: "MockEditedPartner" })
     ).not.toBeVisible();

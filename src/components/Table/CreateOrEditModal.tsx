@@ -70,9 +70,7 @@ export const CreateOrEditModal = <T extends TableItem & FieldValues>({
           </div>
           <div className="mx-auto max-w-sm space-y-3 py-3 text-center">
             <h4 className="text-lg font-medium text-gray-800">{header}</h4>
-            <p className="text-[15px] text-gray-600">
-              Enter Partner Details below
-            </p>
+            <p className="text-[15px] text-gray-600">Enter Details below</p>
             <form onSubmit={handleSubmit(onSubmit)}>
               {columns.map((value, index) => (
                 <div
