@@ -5,10 +5,7 @@ import {
   DeleteModalButton,
 } from "../Table/DeleteModal";
 
-export const ProjectDeleteModalButton = ({
-  id,
-  name,
-}: BaseDeleteModalProps) => {
+export const ProjectDeleteModalButton = ({ id }: BaseDeleteModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const utils = api.useContext();
   const deleteProject = api.project.deletePartnerProject.useMutation({
@@ -32,7 +29,6 @@ export const ProjectDeleteModalButton = ({
   return (
     <DeleteModalButton
       isOpenState={[isOpen, setIsOpen]}
-      name={name} // TODO, this will need to be made generic
       handleDelete={() => handleDelete(id)}
       deleteType="project"
     />

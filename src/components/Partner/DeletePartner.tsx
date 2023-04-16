@@ -7,7 +7,6 @@ import {
 
 export const PartnerDeleteModalButton = ({
   id,
-  name,
 }: BaseDeleteModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const utils = api.useContext();
@@ -32,7 +31,6 @@ export const PartnerDeleteModalButton = ({
   return (
     <DeleteModalButton
       isOpenState={[isOpen, setIsOpen]}
-      name={name}
       handleDelete={() => handleDelete(id)}
       deleteType="partner"
     />

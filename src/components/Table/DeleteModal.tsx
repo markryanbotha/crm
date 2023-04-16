@@ -2,7 +2,6 @@ import type { Dispatch, SetStateAction } from "react";
 
 export type BaseDeleteModalProps = {
   id?: string;
-  name?: string;
   deleteType: string;
 };
 
@@ -12,7 +11,6 @@ interface DeleteModalProps extends BaseDeleteModalProps {
 }
 
 export const DeleteModalButton = ({
-  name,
   deleteType,
   isOpenState,
   handleDelete,
@@ -54,8 +52,7 @@ export const DeleteModalButton = ({
               <div className="mt-3 space-y-2 p-4 text-center text-[15.5px] leading-relaxed text-gray-500">
                 <p>
                   Are you sure you want to{" "}
-                  <strong className="text-red-500">delete {name}</strong>{" "}
-                  {deleteType}
+                  <strong className="text-red-500">delete {deleteType}</strong>
                 </p>
               </div>
               <div className="mt-5 flex items-center gap-3 border-t p-4">
