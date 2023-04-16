@@ -57,7 +57,6 @@ const Login = () => {
 
   const router = useRouter();
 
-  console.log(errors);
   const onSubmit = async (
     { email, role, partner, name, jobTitle }: UserDetails,
     event?: BaseSyntheticEvent
@@ -79,7 +78,6 @@ const Login = () => {
         }
       }
 
-      console.log("here");
       const signInResponse = await signIn("credentials", {
         redirect: false,
         email,
