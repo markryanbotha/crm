@@ -7,7 +7,7 @@ test.describe("As a Partner or TPM, I can access information about a projects, i
     await page.getByRole("button", { name: "Log in" }).click();
     await page.getByRole("button", { name: "Sign in" }).click();
     await page.getByRole("textbox").click();
-    await page.getByRole("textbox").fill("newuser@email.com");
+    await page.getByRole("textbox").fill("admin@email.com");
     await page.getByRole("button", { name: "Sign in" }).click();
     await page.getByRole("link", { name: "Projects" }).click();
   });
@@ -28,22 +28,21 @@ test.describe("As a Partner or TPM, I can access information about a projects, i
 
   test("As a User, I can create a new project", async ({ page }) => {
     const streamSpotId = "clfzw1w1s0004t625dffywbkb";
-    const newUserId = "clgjf0hry0000t6bgqgru3xyb";
+    const adminUserId = "clfzzixeq0000mv084hwve6sq";
 
     // Fill out partner form
     await page.getByRole("button", { name: "Create Project" }).click();
     await page.locator('input[name="deviceType"]').fill("Mock TV");
     await page.locator('input[name="jiraProject"]').fill("MOCK-1111");
     await page.locator('select[name="partnerId"]').selectOption(streamSpotId);
-    await page.locator('select[name="tpmId"]').selectOption(newUserId);
+    await page.locator('select[name="tpmId"]').selectOption(adminUserId);
     await page.getByRole("button", { name: "Submit" }).click();
 
     // Expect the data to be visible in the table
-    await expect(page.getByRole("cell", { name: "Mock TV" })).toBeVisible();
-    await expect(page.getByRole("cell", { name: "MOCK-1111" })).toBeVisible();
-    await expect(page.getByRole("cell", { name: "StreamSpot" })).toBeVisible();
     await expect(
-      page.getByRole("cell", { name: "newuser@email.com" })
+      page.getByRole("row", {
+        name: "Mock TV MOCK-1111 StreamSpot admin@email.com Edit Delete",
+      })
     ).toBeVisible();
   });
 
@@ -51,7 +50,7 @@ test.describe("As a Partner or TPM, I can access information about a projects, i
     //Click the edit button for the partner we just created
     await page
       .getByRole("row", {
-        name: "Mock TV MOCK-1111 StreamSpot newuser@email.com Edit Delete",
+        name: "Mock TV MOCK-1111 StreamSpot admin@email.com Edit Delete",
       })
       .getByRole("button", { name: "Edit" })
       .click();
@@ -68,20 +67,25 @@ test.describe("As a Partner or TPM, I can access information about a projects, i
     await page.getByRole("button", { name: "Submit" }).click();
 
     // Expect the old data to not be visible in the table
-    await expect(page.getByRole("cell", { name: "Mock TV" })).not.toBeVisible();
+    await expect(
+      page.getByRole("row", {
+        name: "Mock TV MOCK-1111 StreamSpot admin@email.com Edit Delete",
+      })
+    ).not.toBeVisible();
 
     // Expect the edited details to be visible in the table
     await expect(
-      page.getByRole("cell", { name: "Mock Set-Top" })
+      page.getByRole("row", {
+        name: "Mock Set-Top MOCK-2222 StreamSpot admin@email.com Edit Delete",
+      })
     ).toBeVisible();
-    await expect(page.getByRole("cell", { name: "Mock-2222" })).toBeVisible();
   });
 
   test("As a User, I can delete a partner", async ({ page }) => {
     // Delete the project edited in the previous test
     await page
       .getByRole("row", {
-        name: "Mock Set-Top MOCK-2222 StreamSpot newuser@email.com Edit Delete",
+        name: "Mock Set-Top MOCK-2222 StreamSpot admin@email.com Edit Delete",
       })
       .getByRole("button", { name: "Delete" })
       .click();
@@ -96,7 +100,9 @@ test.describe("As a Partner or TPM, I can access information about a projects, i
 
     // Expect the project we deleted to not be visible
     await expect(
-      page.getByRole("cell", { name: "Mock Set-Top" })
+      page.getByRole("row", {
+        name: "Mock Set-Top MOCK-2222 StreamSpot admin@email.com Edit Delete",
+      })
     ).not.toBeVisible();
   });
 });

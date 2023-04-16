@@ -7,7 +7,7 @@ test.describe("As a TPM, I can add and store partner contact information, includ
     await page.getByRole("button", { name: "Log in" }).click();
     await page.getByRole("button", { name: "Sign in" }).click();
     await page.getByRole("textbox").click();
-    await page.getByRole("textbox").fill("newuser@email.com");
+    await page.getByRole("textbox").fill("admin@email.com");
     await page.getByRole("button", { name: "Sign in" }).click();
     await page.getByRole("link", { name: "Partners" }).click();
   });
@@ -32,15 +32,10 @@ test.describe("As a TPM, I can add and store partner contact information, includ
     await page.getByRole("button", { name: "Submit" }).click();
 
     // Expect the data to be visible in the table
-    await expect(page.getByRole("cell", { name: "MockPartner" })).toBeVisible();
     await expect(
-      page.getByRole("cell", { name: "mock@partner.com" })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("cell", { name: "+444444444444" })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("cell", { name: "mock@partner.com" })
+      page.getByRole("row", {
+        name: "MockPartner mock@partner.com +444444444444 TST Mock Partner for E2E tests Edit Delete",
+      })
     ).toBeVisible();
   });
 
@@ -71,24 +66,18 @@ test.describe("As a TPM, I can add and store partner contact information, includ
 
     // Expect the old data to not be visible in the table
     await expect(
-      page.getByRole("cell", { name: "MockEditedPartner" })
+      page.getByRole("row", {
+        name: "MockPartner mock@partner.com +444444444444 TST Mock Partner for E2E tests Edit Delete",
+      })
     ).not.toBeVisible();
 
     // Expect the edited details to be visible in the table
     await expect(
-      page.getByRole("cell", { name: "MockEditedPartner" })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("cell", { name: "edited-mock@partner.com" })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("cell", { name: "+55555555555" })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("cell", { name: "EST", exact: true })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("cell", { name: "Edited Summary for E2E tests" })
+      page
+        .getByRole("row", {
+          name: "MockEditedPartner edited-mock@partner.com +55555555555 EST Edited Summary for E2E tests Edit Delete",
+        })
+        .getByRole("button", { name: "Delete" })
     ).toBeVisible();
   });
 
@@ -111,7 +100,11 @@ test.describe("As a TPM, I can add and store partner contact information, includ
 
     // Expect the partner that was deleted to not be visible
     await expect(
-      page.getByRole("cell", { name: "MockEditedPartner" })
+      page
+        .getByRole("row", {
+          name: "MockEditedPartner edited-mock@partner.com +55555555555 EST Edited Summary for E2E tests Edit Delete",
+        })
+        .getByRole("button", { name: "Delete" })
     ).not.toBeVisible();
   });
 });

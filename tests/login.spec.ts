@@ -26,7 +26,7 @@ test.describe("Login and Signup", () => {
     await page.goto("/");
     await page.getByRole("link", { name: "Get started" }).click();
     await page.getByRole("button", { name: "Sign in" }).click();
-    await page.locator('input[name="email"]').fill(`newuser@email.com`);
+    await page.locator('input[name="email"]').fill(`admin@email.com`);
     await page.getByRole("button", { name: "Sign in" }).click();
 
     await expect(page.getByRole("heading", { name: "Projects" })).toBeVisible();
@@ -37,7 +37,7 @@ test.describe("Login and Signup", () => {
   }) => {
     await page.goto("/");
     await page.getByRole("link", { name: "Get started" }).click();
-    await page.locator('input[name="email"]').fill(`newuser@email.com`);
+    await page.locator('input[name="email"]').fill(`admin@email.com`);
     await page.locator('input[name="name"]').fill(`Mock User`);
     await page.locator('input[name="jobTitle"]').fill(`Mock Job Title`);
     await page.getByRole("button", { name: "Sign up" }).click();
