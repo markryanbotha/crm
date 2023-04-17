@@ -18,6 +18,8 @@ type ContactFormProps = {
   formState: UseFormReturn<Communication>;
 };
 
+// Modal that is used to fill in the details to send a message, and contains validation for the data inserted into the form
+// When the form is submitted, the data is added to the database, which can then be viewed by the recipient
 const ContactForm = ({ isOpenState, formState }: ContactFormProps) => {
   const utils = api.useContext();
   const [isOpen, setIsOpen] = isOpenState;
@@ -146,6 +148,7 @@ const ContactForm = ({ isOpenState, formState }: ContactFormProps) => {
   ) : null;
 };
 
+// A button that is used to display the modal above, which sends a message to a user
 const SendMessage = () => {
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   const formState = useForm<Communication>({

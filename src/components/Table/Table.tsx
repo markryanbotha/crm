@@ -6,6 +6,9 @@ export type TableItem = {
   id: string;
 };
 
+// The customInputField allows the create or edit modal to use a custom form input component. By default, a text input field is used
+// The customDisplayField allows a custom component to be displayed in the table. By default, text is displayed.
+// The path allows for a custom location to locate the necessary data. It is used when joins are performed to add additional data from a different table.
 export type ColumnDefinitionType<T extends TableItem, K extends keyof T> = {
   key: K;
   header: string;
@@ -26,6 +29,8 @@ interface TableProps<T extends TableItem, K extends keyof T> {
 
 export type TableDataType = Partner | PartnerProject;
 
+// This is a generic table component, that renders a table based on the data and columns that are based to it
+// It also allows for custom create, edit and delete modal buttons in the table
 const Table = <T extends TableItem, K extends keyof T>({
   heading,
   subheading,

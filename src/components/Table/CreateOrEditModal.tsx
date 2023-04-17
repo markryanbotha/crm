@@ -21,6 +21,7 @@ interface ModalProps<T extends TableItem> extends BaseModalProps<T> {
   formControls: UseFormReturn<T>;
 }
 
+// This is a generic component used to render a create or edit modal
 export const CreateOrEditModal = <T extends TableItem & FieldValues>({
   header,
   isOpenState,

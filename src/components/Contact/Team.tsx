@@ -7,6 +7,7 @@ type TeamProps = {
   users: User[];
 };
 
+// This is a generic component that displays contact information based on a list of users based to it
 const Team = ({ header, description, users }: TeamProps) => {
   return (
     <section className="py-14">

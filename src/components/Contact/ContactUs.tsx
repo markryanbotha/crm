@@ -2,6 +2,7 @@ import { api } from "~/utils/api";
 import Team from "./Team";
 import { Loading } from "../common";
 
+// This is a component that displays the contact information for all admin users
 const ContactUs = () => {
   const { data, isLoading, isError } = api.user.getAllAdminUsers.useQuery();
 

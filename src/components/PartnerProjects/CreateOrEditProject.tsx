@@ -10,6 +10,8 @@ import {
 } from "../Table/CreateOrEditModal";
 import { projectColumns } from "./ProjectTable";
 
+// This component renders a modal to create or edit a project
+// It handles data validation, and making the API requests to the server
 export const ProjectCreateOrEditModal = ({
   header,
   data,

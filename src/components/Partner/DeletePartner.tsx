@@ -5,6 +5,7 @@ import {
   DeleteModalButton,
 } from "../Table/DeleteModal";
 
+// This is a delete button used to delete a specific partner in the Parnter Table
 export const PartnerDeleteModalButton = ({
   id,
 }: BaseDeleteModalProps) => {

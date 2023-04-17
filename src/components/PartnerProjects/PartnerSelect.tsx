@@ -8,6 +8,8 @@ type PartnerSelectProps = {
   register?: UseFormRegister<PartnerProject>;
   error?: FieldError;
 };
+// This component queries the database for partners, and displays the options in a dropdown menu
+// It allows users to select the name of the partner, and it inserts the partnerID into the form
 export const PartnerSelect = ({ register, error }: PartnerSelectProps) => {
   const {
     data: partnerData,

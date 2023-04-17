@@ -6,6 +6,7 @@ type CardsProps = {
   data: CommunicationWithAggregations[];
 };
 
+// Component to render messages as a list of cards
 const Cards = ({ data }: CardsProps) => {
   return (
     <section className="mt-1 w-full px-4 md:px-8">

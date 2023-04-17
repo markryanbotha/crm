@@ -10,6 +10,7 @@ interface DeleteModalProps extends BaseDeleteModalProps {
   isOpenState: [boolean, Dispatch<SetStateAction<boolean>>];
 }
 
+// This is a generic component that is used to render a delete modal
 export const DeleteModalButton = ({
   deleteType,
   isOpenState,

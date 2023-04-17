@@ -9,6 +9,7 @@ import {
 import { PartnerDeleteModalButton } from "./DeletePartner";
 import Link from "next/link";
 
+// This component generates a link to the respective partners contact page.
 type PartnerLinkProps = { data?: Partner };
 const PartnerLink = ({ data }: PartnerLinkProps) => {
   if (!data) return null;
@@ -23,6 +24,7 @@ const PartnerLink = ({ data }: PartnerLinkProps) => {
   return <p>{data?.name}</p>;
 };
 
+// This defines the custom columns that are used in the Partner Table
 export const partnerColumns: ColumnDefinitionType<Partner, keyof Partner>[] = [
   { key: "name", header: "Name", customDisplayField: <PartnerLink /> },
   { key: "email", header: "Email" },
@@ -31,6 +33,8 @@ export const partnerColumns: ColumnDefinitionType<Partner, keyof Partner>[] = [
   { key: "summary", header: "Summary" },
 ];
 
+// This component queries the partner table and uses the generic Table component
+// to display the necessary information based on the column definitions
 const PartnerTable = () => {
   const partners = api.partner.getAllPartners.useQuery();
   const partnerData = partners?.data && partners.data;

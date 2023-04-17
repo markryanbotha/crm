@@ -8,6 +8,8 @@ type CommunicationCardProps = {
   communicationType: CommunicationType;
 };
 
+// Component that performs the API call for all 3 message types, which allows messages to be loaded in the background
+// Return the appropriate cards based on the active communicationType
 export const CommunicationCards = ({
   communicationType,
 }: CommunicationCardProps) => {

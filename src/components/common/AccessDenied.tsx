@@ -2,6 +2,7 @@ import { type NextPage } from "next";
 import Link from "next/link";
 import { Navbar } from "~/components/Layouts";
 
+// Component to display to user when they do not have access to a specific page
 const AccessDenied: NextPage = () => {
   return (
     <main className="flex min-h-screen flex-col items-center justify-start bg-gradient-to-b from-[#282c35] to-[#15162c]">

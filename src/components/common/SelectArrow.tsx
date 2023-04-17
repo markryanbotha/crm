@@ -1,3 +1,4 @@
+// An component that returns an SVG icon to be used in selection fields
 const SelectArrow = () => {
   return (
     <svg

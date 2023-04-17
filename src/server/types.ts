@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+// Define Zod types that can be used to validate inputs to tRPC routers,
+// and also used to validate user input in forms in the frontend
+// This ensures that consistent data enters the database according to a single definition
 export const partnerSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, "The name of the partner must be defined"),

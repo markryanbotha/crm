@@ -12,6 +12,7 @@ import { ProjectDeleteModalButton } from "./DeleteProject";
 import { PartnerSelect } from "./PartnerSelect";
 import { TPMSelect } from "./TpmSelect";
 
+// Column definition to define shape of the Project Table, and pass custom input fields and paths
 export const projectColumns: ColumnDefinitionType<
   PartnerProject,
   keyof PartnerProject

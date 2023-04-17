@@ -8,6 +8,7 @@ type MessageNavigationProps = {
   setCommunicationType: Dispatch<SetStateAction<CommunicationType>>;
 };
 
+// Component that renders the tabs for users to navigate between all messages, messages that they have sent and messages that they have received
 const MessageNavigation = ({
   communicationType,
   setCommunicationType,

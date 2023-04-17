@@ -1,3 +1,4 @@
+// A component that displays a loading indictor
 const Loading = () => (
   <div role="status">
     <svg

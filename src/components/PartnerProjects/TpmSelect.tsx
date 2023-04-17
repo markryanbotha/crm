@@ -8,6 +8,9 @@ type TpmSelectProps = {
   register?: UseFormRegister<PartnerProject>;
   error?: FieldError;
 };
+
+// This component queries the database for Admin uses, and displays the options in a dropdown menu
+// It allows users to select the email of the admin user, and it inserts the users ID into the form
 export const TPMSelect = ({ register, error }: TpmSelectProps) => {
   const {
     data: tpmData,

@@ -10,6 +10,8 @@ import {
 } from "../Table/CreateOrEditModal";
 import { partnerColumns } from "./PartnerTable";
 
+// This is a modal, that can be used to create a partner, or edit an existing partner, depending on the "type" prop
+// It validates the user input into the form, and calls the appropriate API endpoint
 export const PartnerCreateOrEditModal = ({
   header,
   data,
@@ -55,6 +57,7 @@ export const PartnerCreateOrEditModal = ({
   );
 };
 
+// This component is used to display the Modal used to create a new partner
 export const PartnerCreateModalButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -75,6 +78,7 @@ export const PartnerCreateModalButton = () => {
   );
 };
 
+// This component is used to display the Modal used to edit an existing partner
 export const PartnerEditModalButton = ({ data }: { data?: Partner }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (

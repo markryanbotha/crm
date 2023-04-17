@@ -7,6 +7,8 @@ type RecipientSelectProps = {
   register: UseFormRegister<Communication>;
   error?: FieldError;
 };
+
+// Component that queries the User table, to display a dropdown selection menu that can be used to choose who a message is sent to
 export const RecipientSelect = ({ register, error }: RecipientSelectProps) => {
   const { data, isLoading, isError } = api.user.getAllUsers.useQuery();
   const selectProps = {

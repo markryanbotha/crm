@@ -4,6 +4,9 @@ import { Loading } from "../common";
 type ContactPartnerProps = {
   partnerId: string;
 };
+
+// Component that is used to query the User database to display the users in a specific partner
+// It is used as a list of contact information, so users can contact any members of that partner
 const ContactPartner = ({ partnerId }: ContactPartnerProps) => {
   const { data, isLoading, isError } =
     api.partner.getEmployeesInPartner.useQuery(partnerId);

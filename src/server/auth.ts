@@ -8,6 +8,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "~/server/db";
 import Credentials from "next-auth/providers/credentials";
 
+// Define custom types for the Session and user so that we can attach the necessary data
 type UserRole = "Admin" | "User";
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -26,6 +27,7 @@ declare module "next-auth" {
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
+    // Function that attaches user details to jwt token
     jwt({ token, user }) {
       if (user) {
         token.id = user.id;
@@ -36,6 +38,7 @@ export const authOptions: NextAuthOptions = {
 
       return token;
     },
+    // Function that defines the session details from the token
     session({ session, token }) {
       if (token) {
         session.user.id = token.id as string;
@@ -47,9 +50,12 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
+  // Use sessions via Javascript Web Tokens
   session: { strategy: "jwt" },
   jwt: { secret: process.env.JWT_SECRET_TOKEN, maxAge: 24 * 60 * 60 },
+  //Define the page that is used to signIn
   pages: { signIn: "/login" },
+  // Allow nextAuth to communicate with Prisma
   adapter: PrismaAdapter(prisma),
   providers: [
     Credentials({
@@ -58,6 +64,8 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "text", placeholder: "email" },
         role: { label: "Role", type: "text", placeholder: "role" },
       },
+      // This is the function that authorizes a user, by ensuring that their email address exists within the database
+      // It retrieves the users id, email, role and their respective PartnerId to be used in the session cookie, which can be read in the frontend
       async authorize(credentials) {
         if (!credentials) {
           throw new Error("Did not retrieve credentials");

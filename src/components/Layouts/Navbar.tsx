@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
+// This component is a Navbar that is used throughout the application
+// Users can use the Navbar to navigate to important pages
 const Navbar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const { data: sessionData } = useSession();

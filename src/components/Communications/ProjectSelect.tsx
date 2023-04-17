@@ -7,6 +7,8 @@ type ProjectSelectProps = {
   register: UseFormRegister<Communication>;
   error?: FieldError;
 };
+
+// Component that queries the Project table to display a dropdown menu that can be used to select a project
 export const ProjectSelect = ({ register, error }: ProjectSelectProps) => {
   const { data, isLoading, isError } =
     api.project.getAllProjectsForUser.useQuery();

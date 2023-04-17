@@ -5,6 +5,7 @@ import {
   DeleteModalButton,
 } from "../Table/DeleteModal";
 
+// This is button that is used to delete a project, and it includes a confirmation modal
 export const ProjectDeleteModalButton = ({ id }: BaseDeleteModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const utils = api.useContext();
