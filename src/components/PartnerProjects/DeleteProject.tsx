@@ -4,9 +4,11 @@ import {
   type BaseDeleteModalProps,
   DeleteModalButton,
 } from "../Table/DeleteModal";
+import { useSession } from "next-auth/react";
 
 // This is button that is used to delete a project, and it includes a confirmation modal
 export const ProjectDeleteModalButton = ({ id }: BaseDeleteModalProps) => {
+  const { data: sessionData } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const utils = api.useContext();
   const deleteProject = api.project.deletePartnerProject.useMutation({
@@ -27,11 +29,12 @@ export const ProjectDeleteModalButton = ({ id }: BaseDeleteModalProps) => {
     setIsOpen(false);
   };
 
-  return (
+  // Only admin users can delete projects
+  return sessionData?.user.role === "Admin" ? (
     <DeleteModalButton
       isOpenState={[isOpen, setIsOpen]}
       handleDelete={() => handleDelete(id)}
       deleteType="project"
     />
-  );
+  ) : null;
 };
