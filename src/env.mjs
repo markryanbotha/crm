@@ -8,6 +8,7 @@ const server = z.object({
   DATABASE_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "test", "production"]),
   JWT_SECRET_TOKEN: z.string(),
+  NEXTAUTH_SECRET: z.string(),
 });
 
 /**
@@ -28,6 +29,7 @@ const processEnv = {
   DATABASE_URL: process.env.DATABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
   JWT_SECRET_TOKEN: process.env.JWT_SECRET_TOKEN,
+  NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
 };
 
 // Don't touch the part below
