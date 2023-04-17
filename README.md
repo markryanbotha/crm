@@ -68,7 +68,7 @@ Github Repository: https://github.com/markryanbotha/crm
 
 ### src/server/api
 
-- This directory hosts the code used to handle API requests via tRPC.
+- This directory hosts the code used to handle API requests via [tRPC](https://trpc.io).
 - The `trpc.ts` file contains middleware used in tRPC, such as the context, session data from NextAuth, or procedures.
 - The `src/server/api/routers` directory hosts the functional code used to process requests, communicate with the database, and serve a response.
   - This code is invoked via RPC calls from respective methods in the frontend. tRPC handles the routing of the API calls based on which method is called in the frontend.
@@ -84,7 +84,7 @@ Github Repository: https://github.com/markryanbotha/crm
 
 - The application is built using TypeScript, a statically typed superset of JavaScript.
 - The frontend uses React, a popular JavaScript library for building user interfaces.
-- The PostgreSQL database is hosted in the cloud using SupaBase
+- The PostgreSQL database is hosted in the cloud using [Supabase](https://supabase.com/docs/guides/database)]
 
 ## Technologies used
 
