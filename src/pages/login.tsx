@@ -4,7 +4,7 @@ import { useForm, type UseFormRegister } from "react-hook-form";
 import { api } from "~/utils/api";
 import { type UserDetails, userDetails } from "~/server/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Loading, SelectArrow } from "~/components/common";
 import { TRPCClientError } from "@trpc/client";
 
@@ -56,6 +56,7 @@ const Login = () => {
   });
 
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const onSubmit = async (
     { email, role, partner, name, jobTitle }: UserDetails,
@@ -81,24 +82,23 @@ const Login = () => {
       const signInResponse = await signIn("credentials", {
         redirect: false,
         email,
-        role,
       });
 
       // Sign-in with details, or sign in with the newly created account from the sign-up above
       if (signInResponse) {
-        const { ok, error } = signInResponse;
-        // If the sign-in is successful, redirect user to the home page, or to the page that they initially tried to visit
-        if (ok) {
-          await router.push((router.query?.callbackUrl as string) ?? "/");
-        }
-        // If there is an error, update the input form state to display error to user
+        const { error } = signInResponse;
+
         if (error) {
+          // If there is an error, update the input form state to display error to user
           setError("email", {
             type: "custom",
-            message: `The email could not be found, please try and sign up instead`,
+            message: error,
           });
           setLoading(false);
+          return;
         }
+        // If the sign-in is successful, redirect user to the home page, or to the page that they initially tried to visit
+        router.push(searchParams.get("callbackUrl") ?? "/");
       }
     } catch (e) {
       // An error from TRPC will mean that the user is trying to create an account with an email address that already exists
@@ -108,6 +108,7 @@ const Login = () => {
           message:
             "That email address is already signed up, please sign in instead",
         });
+        setLoading(false);
       } else {
         // Catch all error messages to display to user
         setError("email", {
@@ -115,9 +116,9 @@ const Login = () => {
           message: "An Error Occurred",
         });
         // Rethrow error message for debugging
+        setLoading(false);
         throw e;
       }
-      setLoading(false);
     }
   };
 

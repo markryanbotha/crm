@@ -4,7 +4,6 @@ import {
   type NextAuthOptions,
   type DefaultSession,
 } from "next-auth";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "~/server/db";
 import Credentials from "next-auth/providers/credentials";
 
@@ -56,13 +55,11 @@ export const authOptions: NextAuthOptions = {
   //Define the page that is used to signIn
   pages: { signIn: "/login" },
   // Allow nextAuth to communicate with Prisma
-  adapter: PrismaAdapter(prisma),
   providers: [
     Credentials({
       name: "credentials",
       credentials: {
         email: { label: "Email", type: "text", placeholder: "email" },
-        role: { label: "Role", type: "text", placeholder: "role" },
       },
       // This is the function that authorizes a user, by ensuring that their email address exists within the database
       // It retrieves the users id, email, role and their respective PartnerId to be used in the session cookie, which can be read in the frontend
@@ -77,7 +74,9 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!user) {
-          throw new Error("No user found");
+          throw new Error(
+            "The email could not be found, please try and sign up instead"
+          );
         }
 
         if (!(user.role === "Admin" || user.role === "User")) {
