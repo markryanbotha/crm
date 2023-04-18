@@ -1,4 +1,4 @@
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { type FC, type BaseSyntheticEvent, useState } from "react";
 import { useForm, type UseFormRegister } from "react-hook-form";
 import { api } from "~/utils/api";
@@ -37,6 +37,16 @@ const Login = () => {
   const [isSignIn, setIsSignIn] = useState(false); // The page is in a Sign in state if this is true, otherwise, it is in a Sign up state if it is false
   const [role, setRole] = useState("Admin");
   const [loading, setLoading] = useState(false); // Custom loading state to determine if the page is waiting for a response from the server. It is used to disable the sign in/up button
+  const { data: sessionData } = useSession();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const routeAfterSignIn = () => {
+    router.push(searchParams.get("callbackUrl") ?? "/");
+    // There is an issue with the Next Router, and it occasionally does not route the user after sign-in, so also do a manual route to fix the issue
+    window.location.href = searchParams.get("callbackUrl") ?? "/";
+  };
+
   const signUp = api.user.signUp.useMutation({
     async onSettled(user) {
       if (user) {
@@ -44,7 +54,7 @@ const Login = () => {
           redirect: false,
           email: user.email,
         });
-        router.push(searchParams.get("callbackUrl") ?? "/");
+        return routeAfterSignIn();
       }
     },
   });
@@ -65,15 +75,19 @@ const Login = () => {
     resolver: zodResolver(formValidation),
   });
 
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
   const onSubmit = async (
     { email, role, partner, name, jobTitle }: UserDetails,
     event?: BaseSyntheticEvent
   ) => {
     event?.preventDefault();
     setLoading(true);
+    // Prefetch the data in the page that we will reroute to
+    router.prefetch(searchParams.get("callbackUrl") ?? "/");
+
+    if (sessionData?.user) {
+      return routeAfterSignIn();
+    }
+
     try {
       // Sign-up
       if (!isSignIn) {
@@ -95,7 +109,7 @@ const Login = () => {
 
         // Sign-in with details, or sign in with the newly created account from the sign-up above
         if (signInResponse) {
-          const { error } = signInResponse;
+          const { error, ok } = signInResponse;
 
           if (error) {
             // If there is an error, update the input form state to display error to user
@@ -107,7 +121,12 @@ const Login = () => {
             return;
           }
           // If the sign-in is successful, redirect user to the home page, or to the page that they initially tried to visit
-          router.push(searchParams.get("callbackUrl") ?? "/");
+          if (ok) {
+            setLoading(false);
+            return routeAfterSignIn();
+          } else {
+            throw new Error("Signing in was not successful, please retry");
+          }
         }
       }
     } catch (e) {
