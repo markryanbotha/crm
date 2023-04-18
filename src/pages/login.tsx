@@ -37,7 +37,17 @@ const Login = () => {
   const [isSignIn, setIsSignIn] = useState(false); // The page is in a Sign in state if this is true, otherwise, it is in a Sign up state if it is false
   const [role, setRole] = useState("Admin");
   const [loading, setLoading] = useState(false); // Custom loading state to determine if the page is waiting for a response from the server. It is used to disable the sign in/up button
-  const signUp = api.user.signUp.useMutation();
+  const signUp = api.user.signUp.useMutation({
+    async onSettled(user) {
+      if (user) {
+        await signIn("credentials", {
+          redirect: false,
+          email: user.email,
+        });
+        router.push(searchParams.get("callbackUrl") ?? "/");
+      }
+    },
+  });
 
   // This determines what schema to use to validate the form, depending if it is in a sign in state or a sign up state
   // Sign in state only requires the email field, whereas the sign up state requires all user details
@@ -77,28 +87,28 @@ const Login = () => {
         if (!newUser) {
           throw new Error("User could not sign up");
         }
-      }
+      } else {
+        const signInResponse = await signIn("credentials", {
+          redirect: false,
+          email,
+        });
 
-      const signInResponse = await signIn("credentials", {
-        redirect: false,
-        email,
-      });
+        // Sign-in with details, or sign in with the newly created account from the sign-up above
+        if (signInResponse) {
+          const { error } = signInResponse;
 
-      // Sign-in with details, or sign in with the newly created account from the sign-up above
-      if (signInResponse) {
-        const { error } = signInResponse;
-
-        if (error) {
-          // If there is an error, update the input form state to display error to user
-          setError("email", {
-            type: "custom",
-            message: error,
-          });
-          setLoading(false);
-          return;
+          if (error) {
+            // If there is an error, update the input form state to display error to user
+            setError("email", {
+              type: "custom",
+              message: error,
+            });
+            setLoading(false);
+            return;
+          }
+          // If the sign-in is successful, redirect user to the home page, or to the page that they initially tried to visit
+          router.push(searchParams.get("callbackUrl") ?? "/");
         }
-        // If the sign-in is successful, redirect user to the home page, or to the page that they initially tried to visit
-        router.push(searchParams.get("callbackUrl") ?? "/");
       }
     } catch (e) {
       // An error from TRPC will mean that the user is trying to create an account with an email address that already exists
@@ -116,8 +126,9 @@ const Login = () => {
           message: "An Error Occurred",
         });
         // Rethrow error message for debugging
+        console.error(e);
+
         setLoading(false);
-        throw e;
       }
     }
   };
